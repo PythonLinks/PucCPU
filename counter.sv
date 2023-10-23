@@ -3,10 +3,10 @@ module COUNTER (clock,
                 count);
    `include "parameters.h"   
    input clock;
-   output reg reset;
+   input reset;
    output reg [COUNTER_WIDTH-1:0] count;    
-  
-always @ (posedge clock) begin  
+   
+always @ (posedge clock) begin
     if (reset)  
       count <= 0;  
     else  

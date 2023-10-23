@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 `include "cpu.sv"
 
 module top();
@@ -20,13 +21,12 @@ always #10 clock = ~clock;
 
 initial begin
     clock = 0;
-    cpu.decoder.reset = 0;
     cpu.counter.count = 0 ;  
-    $display ("CLOCK   COUNT   INSTRUCTION RESET");
-    $monitor (clock,"         ", count,"       ",  instruction,"       ", cpu.decoder.reset);
+    $display ("COUNT   INSTRUCTION RESET PReV");
+    $monitor ( count,"       ",  instruction,"       ", cpu.counter.reset);
     #120;
-    $display("End of simulation");
     $finish;
+    $display("End of simulation");
 end
    
 endmodule // top

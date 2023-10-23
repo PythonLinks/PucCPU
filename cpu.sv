@@ -3,7 +3,7 @@
 `include "decoder.sv"
 
 module CPU(input clock,
-	   output reset,
+	   output wire reset,
            output [COUNTER_WIDTH-1 : 0] count, 
            output [WIDTH-1 : 0]instruction);
     
