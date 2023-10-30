@@ -1,10 +1,11 @@
-`include "counter.sv"
+//`ifdef IVERILOG
 `include "memory.sv"
 `include "alu.sv"
-
+//`endif
+  
 module CPU(clock,
-	   reset,
-           count, 
+	   isReset,
+           pc, 
            instruction,
            accumulator,
            register1,
@@ -12,40 +13,38 @@ module CPU(clock,
     
    `include "parameters.h"
    input wire		  clock;
-   output wire		  reset;
-   output wire [COUNTER_WIDTH-1:0]     count;
+   output wire		  isReset;
+   output reg [PC_WIDTH-1:0]     pc;
    output wire [INSTRUCTION_WIDTH-1:0] instruction;
    output reg  [REGISTER_WIDTH-1:0]  accumulator;
    output reg  [REGISTER_WIDTH-1:0]  register1;
    output wire [REGISTER_WIDTH -1:0] aluResult;
-   wire	       [OPCODE_WIDTH-1:0]    opCode;
+   wire	       [3:0]    opCode;
    assign opCode  = instruction[10:8];
    reg  [REGISTER_WIDTH-1:0]  value;      
 
+  
+always @ (posedge clock) 
+   case (opCode)
+     JUMP   : pc = instruction[3:0]; 
+     RESET  : pc = 4'd0;
+     default: pc = pc + 1'b1;  
+  endcase
    
-   COUNTER counter( .clock(clock),
-		    .reset (reset),
-		    .count (count));
-
-   MEMORY memory ( .count(count),
+   MEMORY memory ( .pc(pc),
 		   .instruction (instruction));
 
-   assign opCode = instruction[10:8];
+   assign opCode = instruction[12:8];
+
+   assign isReset = (opCode == RESET);
+
+   
    assign value = instruction [REGISTER_WIDTH-1:0];
    ALU alu (.accumulator(accumulator),
             .register1 (register1),
             .opCode (opCode), 
             .aluResult(aluResult));
 
-   //wire			      clockEnable;
-   //wire			      isLoadI; 
-
-   //assign clockEnable = TRUE;  //!((opCode == MOVE)|| (opCode == NOOP));
-
-   //assign reset = (opCode == RESET)? TRUE: FALSE;
-
-   //assign isALU = (clockEnable && !reset)? FALSE:TRUE;
-   //assign isLoadI = (opCode == LOADI);
 
    always @(posedge clock) 
     if (opCode == MOVE) 
@@ -54,7 +53,6 @@ module CPU(clock,
    always @(posedge clock)
      casex (opCode)
      ADD:      accumulator <= aluResult;
-     MOVE:     accumulator <= accumulator;       
      LOADI:    accumulator[7:0] <= value[7:0];
      RESET:    accumulator <= 0;  
      default:  accumulator <= accumulator;
