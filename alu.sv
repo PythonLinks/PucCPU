@@ -1,16 +1,16 @@
-module ALU(accumulator, register1, opCode, aluResult);
+module ALU(accumulator, registerValue, opCode, aluResult);
    `include "parameters.h"
    input  [OPCODE_WIDTH -1:0] opCode;
-   input  [REGISTER_WIDTH -1:0] register1;
+   input  [REGISTER_WIDTH -1:0] registerValue;
    input  [REGISTER_WIDTH -1:0] accumulator;
    output reg [REGISTER_WIDTH -1:0] aluResult;
 
 always @ (*)   
    case (opCode)
-     ADD:         aluResult = accumulator + register1;
+     ADD:         aluResult = accumulator + registerValue;
      INCREMENT:   aluResult = accumulator + 1'b1;
-     AND:         aluResult = accumulator && register1;
-     OR:          aluResult = accumulator | register1;
+     AND:         aluResult = accumulator && registerValue;
+     OR:          aluResult = accumulator | registerValue;
 	  default:     aluResult = accumulator;
    endcase // case (opCode)
    

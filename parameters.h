@@ -1,6 +1,8 @@
 parameter PC_WIDTH = 4;
 parameter REGISTER_WIDTH = 8;
-parameter INSTRUCTION_WIDTH = 12; 
+
+//Instruction is 4 bits instructin, 3 bits register, 8 bits address 
+parameter INSTRUCTION_WIDTH = 15; 
 parameter OPCODE_WIDTH = 4;
 parameter TRUE   = 1'b1;
 parameter FALSE  = 1'b0;

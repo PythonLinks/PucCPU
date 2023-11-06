@@ -24,7 +24,7 @@ CPU cpu (.clock(clock),
          .pc(pc),
          .instruction(instruction),
          .accumulator(accumulator),
-         .register1(register1),
+         .registerValue(registerValue),
          .aluResult(aluResult));
 
 endmodule // top
