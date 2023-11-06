@@ -20,7 +20,7 @@ wire [REGISTER_WIDTH-1: 0]          register1;
 wire [REGISTER_WIDTH-1: 0]          aluResult;      
    
 CPU cpu (.clock(clock),
-	 .reset(reset),
+	 .isReset(reset),
          .pc(pc),
          .instruction(instruction),
          .accumulator(accumulator),

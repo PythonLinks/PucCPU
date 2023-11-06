@@ -1,7 +1,7 @@
-//`ifdef IVERILOG
+`ifdef IVERILOG
 `include "memory.sv"
 `include "alu.sv"
-//`endif
+`endif
   
 module CPU(clock,
 	   isReset,
@@ -20,7 +20,8 @@ module CPU(clock,
    output reg  [REGISTER_WIDTH-1:0]  register1;
    output wire [REGISTER_WIDTH -1:0] aluResult;
    wire	       [3:0]    opCode;
-   assign opCode  = instruction[10:8];
+	assign opCode = instruction[11:8];
+
    reg  [REGISTER_WIDTH-1:0]  value;      
 
   
@@ -34,7 +35,6 @@ always @ (posedge clock)
    MEMORY memory ( .pc(pc),
 		   .instruction (instruction));
 
-   assign opCode = instruction[12:8];
 
    assign isReset = (opCode == RESET);
 
