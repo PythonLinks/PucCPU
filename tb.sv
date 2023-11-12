@@ -27,13 +27,12 @@ always #10 clock = ~clock;
 initial begin
     clock = 0;
     cpu.pc = 0 ;
-    $display ("PC       PCNEW OPCODE InstValue  ACCUMULTOR  REGValue, ALURESULT ");
+    $display ("   PC  OPCODE InstValue  ACCUMULTOR  REGValue, ALURESULT ");
     $monitor ( "  ", 
-             pc,"       ",
-             instruction [3:0], "     ", 	  	       
-             instruction[11:8],"       ", 
-             instruction [7:0],"       ",
-             accumulator, "   ",
+             pc,"      %h    ",
+             instruction [15:12], "   ", 
+             instruction [3:0],"       ",
+             accumulator, "       ",
              registerValue, "          ", 
              aluResult);
    

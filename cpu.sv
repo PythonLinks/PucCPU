@@ -1,4 +1,4 @@
-//`define IVERILOG
+`define IVERILOG
 
 `ifdef IVERILOG
 `include "memory.sv"
@@ -32,20 +32,20 @@ module CPU(clock,
    assign instructionValue = instruction [REGISTER_WIDTH-1:0];   
    assign selectedRegister = instruction [INSTRUCTION_WIDTH-5:
                                           INSTRUCTION_WIDTH -7];
-   assign registerValue    = registers   [selectedRegister] ;
+   assign registerValue    = registers  [1];//] [selectedRegister] ;
    
   
 always @ (posedge clock) 
    case (opCode)
-     JUMP   : pc = instruction[3:0]; 
-     RESET  : pc = 4'd0;
+     JUMP3   : pc = instructionValue[PC_WIDTH-1:0]; 
+     RESET4  : pc = 4'd0;
      default: pc = pc + 1'b1;  
    endcase
    
    MEMORY memory ( .pc(pc),
 		   .instruction (instruction));
 
-   assign isReset = (opCode == RESET);
+   assign isReset = (opCode == RESET4);
   
    ALU alu (.accumulator(accumulator),
             .registerValue (registerValue),
@@ -54,14 +54,14 @@ always @ (posedge clock)
 
 
    always @(posedge clock) 
-    if (opCode == MOVE) 
-      registers[selectedRegister] <= accumulator;
+    if (opCode == MOVE1) 
+      registers[1] <= accumulator;
    
    always @(posedge clock)
      casex (opCode)
-     ADD:      accumulator <= aluResult;
-     LOADI:    accumulator[7:0] <= instructionValue[7:0];
-     RESET:    accumulator <= 0;  
-     default:  accumulator <= accumulator;
+     ADD2:      accumulator <= aluResult;
+     LOAD0:     accumulator <= instructionValue;
+     RESET4:    accumulator <= 0;  
+     default:   accumulator <= accumulator;
      endcase
 endmodule   

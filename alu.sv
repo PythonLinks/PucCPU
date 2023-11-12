@@ -7,11 +7,11 @@ module ALU(accumulator, registerValue, opCode, aluResult);
 
 always @ (*)   
    case (opCode)
-     ADD:         aluResult = accumulator + registerValue;
-     INCREMENT:   aluResult = accumulator + 1'b1;
-     AND:         aluResult = accumulator && registerValue;
-     OR:          aluResult = accumulator | registerValue;
-	  default:     aluResult = accumulator;
+     ADD2:         aluResult = accumulator + registerValue;
+     INCREMENT7:   aluResult = accumulator + 1'b1;
+     AND8:         aluResult = accumulator && registerValue;
+     OR6:          aluResult = accumulator | registerValue;
+     default:      aluResult = accumulator;
    endcase // case (opCode)
    
 endmodule
