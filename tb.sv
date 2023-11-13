@@ -4,43 +4,44 @@
 module top();
 `include "parameters.h"
 reg clock;
-wire isReset;
-
-wire [PC_WIDTH -1:0]  pc;
-wire [INSTRUCTION_WIDTH -1:0]          instruction ;
-wire [REGISTER_WIDTH-1 : 0]	   accumulator;
-wire [REGISTER_WIDTH-1: 0]          registerValue;
-wire [REGISTER_WIDTH-1: 0]          aluResult;      
+reg isReset;
+reg				    switch;
+wire [REGISTER_WIDTH-1 : 0]	   register1Value;   
+wire  [PC_WIDTH-1:0]          pc;
    
 CPU cpu (.clock(clock),
 	 .isReset(isReset),
-         .pc(pc),
-         .instruction(instruction),
-         .accumulator(accumulator),
-         .registerValue(registerValue),
-         .aluResult(aluResult));
+	 .switch (switch),
+	 .register1Value(register1Value)	 
+);
 
-	 
+
+ 	 
 always #10 clock = ~clock; 
 
 
 initial begin
     clock = 0;
     cpu.pc = 0 ;
-    $display ("   PC  OPCODE InstValue  ACCUMULTOR  REGValue, ALURESULT ");
-    $monitor ( "  ", 
-             pc,"      %h    ",
-             instruction [15:12], "   ", 
-             instruction [3:0],"       ",
-             accumulator, "       ",
-             registerValue, "          ", 
-             aluResult);
+    isReset = 1'b0;
    
-    #200;
+    switch = 1'b1;
+  $display ("result");
+    //$display ("PC  OP InstValue  ACCUM REG0  REG1  Value0 Value1 ALURESULT ");
+    $display ("OP  PC Value ACCUM REG0 REG1 Value0 Value1 ");
+
+    #600;
+    switch = ~switch;
+    #350;
+    switch = ~switch;
+   #600;
+   
     $finish;
     $display("End of simulation");
+ 
 end
-   
+
+     
 endmodule // top
 
 

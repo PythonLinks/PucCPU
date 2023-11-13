@@ -4,28 +4,29 @@
 `endif
 
 module Top(clock,
-           accumulator 
+           isReset,
+	        switch,
+           outputValue,
            );
 
    
 `include "parameters.h"
-input  clock;
-wire reset;
-output wire [REGISTER_WIDTH-1 : 0]	   accumulator;
-   
 
-wire [PC_WIDTH -1:0]  pc;
-wire [INSTRUCTION_WIDTH -1:0]          instruction ;
-wire [REGISTER_WIDTH-1: 0]          register1;
-wire [REGISTER_WIDTH-1: 0]          aluResult;      
+input reg clock;
+input wire isReset;
+input reg				    switch;
+wire        [REGISTER_WIDTH-1 :0]	   register1Value;   
+output wire [REGISTER_WIDTH-1 :0]	  outputValue;   
+wire [PC_WIDTH-1:0] 		   pc;
+assign outputValue = {4'b0,pc};
+
    
 CPU cpu (.clock(clock),
-	 .isReset(reset),
-         .pc(pc),
-         .instruction(instruction),
-         .accumulator(accumulator),
-         .registerValue(registerValue),
-         .aluResult(aluResult));
+	 .isReset(isReset),
+	 .pc (pc),
+	 .switch (switch),
+	 .register1Value(registerValue)
+);
 
 endmodule // top
 
