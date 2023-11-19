@@ -12,11 +12,12 @@ module ALU(accumulator,
 
 always @ (*)   
    case (opCode)
-     ADD2:         aluResult = register0Value + register1Value;
-     INCREMENT11:   aluResult = accumulator + 1'b1;
-     //AND8:         aluResult = accumulator && registerValue;
-     //OR6:          aluResult = accumulator | registerValue;
-     default:      aluResult = accumulator;
+     ADD2:         aluResult <= register0Value + register1Value;
+     LSHIFT13:     aluResult <=  {accumulator[6:0],accumulator[7]};
+     INCREMENT11:   aluResult <= accumulator + 1'b1;
+     //AND8:         aluResult <= accumulator && registerValue;
+     //OR6:          aluResult <= accumulator | registerValue;
+     default:      aluResult <= accumulator;
    endcase // case (opCode)
    
 endmodule

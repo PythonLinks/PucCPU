@@ -1,39 +1,40 @@
 `define IVERILOG
 
 `ifdef IVERILOG
-//`include "memory.sv"
-//`include "alu.sv"
+`include "memory.sv"
+`include "alu.sv"
 `endif
   
 module CPU(clock,
 	   isReset,
 	   switch,
 	   pc,
-	   register1Value,
+           accumulator,	 	   
+	   register1Value
 );
-    
-   `include "parameters.h"
-   input wire		  clock;
-   input  wire		  isReset;
-   input wire				    switch;
+
+`include "parameters.h"
+   
+   input wire		               clock;
+   input  wire		               isReset;
+   input wire			       switch;
    output wire  [REGISTER_WIDTH-1:0]   register1Value;
+   output reg  [REGISTER_WIDTH-1:0]    accumulator;
    
    wire  [REGISTER_WIDTH-1:0]   register0Value;   
    output reg  [PC_WIDTH-1:0]          pc;
    wire [INSTRUCTION_WIDTH-1:0] instruction;
-   reg  [REGISTER_WIDTH-1:0]    accumulator;
    wire [REGISTER_WIDTH -1:0]   aluResult;
    wire [2:0]		       register0;
    wire [2:0]		       register1;   
 
-
-   reg [REGISTER_WIDTH-1:0]    registers[7:0];
-   reg [PC_WIDTH-1:0]	       returnStack[16];
-   reg [3:0]		       stackOffset;
-   wire	       [3:0]    opCode;
-   wire        [REGISTER_WIDTH-1:0]    instructionValue;
-   wire [PC_WIDTH - 1 : 0] 	       pcValue;
-   wire [PC_WIDTH - 1 : 0] 	       returnV;
+   reg  [REGISTER_WIDTH-1:0]   registers[7:0];
+   reg  [PC_WIDTH-1:0]	       returnStack[16];
+   reg  [3:0]		       stackOffset;
+   wire	[3:0]                  opCode;
+   wire [REGISTER_WIDTH-1:0]   instructionValue;
+   wire [PC_WIDTH - 1 : 0]     pcValue;
+   wire [PC_WIDTH - 1 : 0]     returnV;
 
    
    //NOW BEGIN THE ASSIGNMENTS
@@ -81,8 +82,8 @@ always @ (posedge clock)
                       pc <= pc + 1'b1;  
      IF1JUMP6: if (accumulator != 0) 
                       pc <= pcValue;
-                       else
-                     pc <= pc + 1'b1;       
+                      else
+                      pc <= pc + 1;       
      JUMP3   : pc <= instructionValue[PC_WIDTH-1:0]; 
      RESET4  : pc <= 4'd0;
      default:  pc <= pc + 1'b1;  
@@ -123,23 +124,24 @@ always @ (posedge clock)
      ADD2:         accumulator <= aluResult;
      LOAD0:        accumulator <= instructionValue;
      LOADREG10:    accumulator <= registers[register0];
+     LSHIFT13:     accumulator <= aluResult;
      INCREMENT11:  accumulator <= accumulator + 1'b1;
      RESET4:       accumulator <= 0;  
      default:      accumulator <= accumulator;
      endcase
 
 
-initial
-  
+initial 
+    $display ("OP  PC Value ACCUM  Value1 Value1b ");
+   
+initial  
   $monitor(  "%h",
              opCode, "   ", 
              pc,"  %h",
              instructionValue, "  ",
 //	     pcValue,"  ",
              accumulator, "     ",
-	     register0, "     ",
-	     register1, "     ", 	      
-             register0Value, "     ",
+             register1Value, "     %b",
              register1Value, "  ---->",//"     \n",
 	     returnStack[0],  "   ",
 	     returnStack [1], "   ",
