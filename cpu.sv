@@ -1,16 +1,17 @@
 `define IVERILOG
 
 `ifdef IVERILOG
-`include "memory.sv"
-`include "alu.sv"
+//`include "memory.sv"
+//`include "alu.sv"
 `endif
   
 module CPU(clock,
 	   isReset,
 	   switch,
 	   pc,
-           accumulator,	 	   
-	   register1Value
+      accumulator,	 	   
+	   register1Value,
+		opCode
 );
 
 `include "parameters.h"
@@ -20,7 +21,8 @@ module CPU(clock,
    input wire			       switch;
    output wire  [REGISTER_WIDTH-1:0]   register1Value;
    output reg  [REGISTER_WIDTH-1:0]    accumulator;
-   
+   output wire	[OPCODE_WIDTH -1 :0]   opCode;
+
    wire  [REGISTER_WIDTH-1:0]   register0Value;   
    output reg  [PC_WIDTH-1:0]          pc;
    wire [INSTRUCTION_WIDTH-1:0] instruction;
@@ -31,7 +33,6 @@ module CPU(clock,
    reg  [REGISTER_WIDTH-1:0]   registers[7:0];
    reg  [PC_WIDTH-1:0]	       returnStack[16];
    reg  [3:0]		       stackOffset;
-   wire	[3:0]                  opCode;
    wire [REGISTER_WIDTH-1:0]   instructionValue;
    wire [PC_WIDTH - 1 : 0]     pcValue;
    wire [PC_WIDTH - 1 : 0]     returnV;
@@ -64,7 +65,7 @@ initial
          
 always @(posedge clock)
   if (opCode == CALL8)
-    returnStack [stackOffset] <= pc;
+    returnStack [stackOffset] <= pc + 1;
   else
     returnStack [stackOffset] <= returnStack [stackOffset] ;
     
@@ -132,10 +133,10 @@ always @ (posedge clock)
 
 
 initial 
-    $display ("OP  PC Value ACCUM  Value1 Value1b ");
+    $display ("SW OP PC Value ACCUM  Value1 Value1b ");
    
 initial  
-  $monitor(  "%h",
+  $monitor(  switch, " ", "%h",
              opCode, "   ", 
              pc,"  %h",
              instructionValue, "  ",
