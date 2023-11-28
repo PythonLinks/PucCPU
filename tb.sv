@@ -1,3 +1,5 @@
+`default_nettype none
+
 `timescale 1ns/1ps
 `include "cpu.sv"
 
@@ -8,14 +10,12 @@ reg isReset;
 reg		         	   switch;
 wire [REGISTER_WIDTH-1 : 0]	   register1Value;   
 wire  [PC_WIDTH-1:0]               pc;
-wire        [REGISTER_WIDTH-1 :0]	   accumulator;   
 wire [OPCODE_WIDTH -1:0] opCode;
    
 CPU cpu (.clock(clock),
 	 .isReset(isReset),
 	 .switch (switch),
 	 .pc (pc),
- 	 .accumulator(accumulator),
 	 .register1Value(register1Value),
 	 .opCode(opCode)
 
@@ -37,7 +37,8 @@ initial begin
    
     #350;
     isReset = 1'b1;
-   
+    #20 isReset = 1'b0;   
+    
     //switch = ~switch;
    #1200;
    

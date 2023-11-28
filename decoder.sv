@@ -1,3 +1,5 @@
+`default_nettype none
+
 module DECODER (clock, reset, instruction);
    `include "parameters.h"
    input  clock;

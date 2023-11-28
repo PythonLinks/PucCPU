@@ -1,52 +1,60 @@
+`default_nettype none
+
 `define IVERILOG
 
 `ifdef IVERILOG
-//`include "memory.sv"
-//`include "alu.sv"
+`include "memory.sv"
+`include "alu.sv"
 `endif
   
 module CPU(clock,
 	   isReset,
 	   switch,
 	   pc,
-      accumulator,	 	   
 	   register1Value,
-		opCode
+	   opCode
 );
 
 `include "parameters.h"
    
-   input wire		               clock;
+   input  wire		               clock;
    input  wire		               isReset;
-   input wire			       switch;
-   output wire  [REGISTER_WIDTH-1:0]   register1Value;
-   output reg  [REGISTER_WIDTH-1:0]    accumulator;
+   input  wire			       switch;
+   output wire  [REGISTER_WIDTH-1:0]   register1Value;   
    output wire	[OPCODE_WIDTH -1 :0]   opCode;
 
-   wire  [REGISTER_WIDTH-1:0]   register0Value;   
+   wire  [REGISTER_WIDTH-1:0]          register2Value;
    output reg  [PC_WIDTH-1:0]          pc;
-   wire [INSTRUCTION_WIDTH-1:0] instruction;
-   wire [REGISTER_WIDTH -1:0]   aluResult;
-   wire [2:0]		       register0;
-   wire [2:0]		       register1;   
+   wire        [INSTRUCTION_WIDTH-1:0] instruction;
+   wire        [REGISTER_WIDTH -1:0]   aluResult;
+   wire        [3:0]		       register1;
+   wire        [3:0]		       register2;
+   wire        [3:0]		       registerOut;   
 
-   reg  [REGISTER_WIDTH-1:0]   registers[7:0];
+   reg  [REGISTER_WIDTH-1:0]   registers[NUMBER_OF_REGISTERS-1:0];
    reg  [PC_WIDTH-1:0]	       returnStack[16];
    reg  [3:0]		       stackOffset;
-   wire [REGISTER_WIDTH-1:0]   instructionValue;
-   wire [PC_WIDTH - 1 : 0]     pcValue;
+   reg  [3:0]	               previousStackOffset;
+   wire [VALUE_WIDTH - 1 :0]   instructionValue;
+   wire [PC_WIDTH - 1 : 0]     pcPlusOne;   
    wire [PC_WIDTH - 1 : 0]     returnV;
 
-   
    //NOW BEGIN THE ASSIGNMENTS
-   assign pcValue = instruction [PC_WIDTH-1:0];
+   assign pcPlusOne    = pc + 1;  
    assign opCode       = instruction [INSTRUCTION_WIDTH-1:
-                                          INSTRUCTION_WIDTH -4];
-   assign instructionValue = instruction [REGISTER_WIDTH-1:0];   
-   assign register0 = instruction[10:8];
-   assign register1 = instruction[6:4];   
-   assign register0Value = registers[0];
+                                          INSTRUCTION_WIDTH -8];
+   assign register1 = instruction[INSTRUCTION_WIDTH-9:
+                                          INSTRUCTION_WIDTH -12];
+   assign register2 = instruction[INSTRUCTION_WIDTH-13:
+                                          INSTRUCTION_WIDTH -16];
+   assign registerOut = instruction[INSTRUCTION_WIDTH-17:
+                                          INSTRUCTION_WIDTH -20];
+   assign instructionValue = instruction[7:0];
+// [REGISTER_WIDTH-24:0];
+
+   assign register2Value = registers[2];   
    assign register1Value = registers[1];
+   
    wire  [OPCODE_WIDTH - 1:0] 	 resetCode;
    
    assign resetCode = isReset ? RESET4 : opCode; 
@@ -61,28 +69,29 @@ always @ (posedge clock)
   endcase          
 
 initial 
-  stackOffset <=0;
+  stackOffset <= 0;
          
 always @(posedge clock)
   if (opCode == CALL8)
     returnStack [stackOffset] <= pc + 1;
   else
     returnStack [stackOffset] <= returnStack [stackOffset] ;
+
+assign previousStackOffset = stackOffset ? (stackOffset -1) : 0;
     
-assign returnV =   returnStack [0];
-   
+assign returnV =   returnStack [previousStackOffset];
    
 //Update the program counter   
 always @ (posedge clock) 
    case (resetCode)
      EXIT9:         pc <= returnStack[stackOffset - 1'b1];
      CALL8:         pc <= instructionValue[PC_WIDTH-1:0];
-     IF0JUMP5:    if (accumulator == 0) 
-                      pc <= pcValue;
+     IF0JUMP5:    if (registers[2] == 0) 
+                      pc <= instructionValue;
                    else
                       pc <= pc + 1'b1;  
-     IF1JUMP6: if (accumulator != 0) 
-                      pc <= pcValue;
+     IF1JUMP6: if (registers[2] != 0) 
+                      pc <= instructionValue;
                       else
                       pc <= pc + 1;       
      JUMP3   : pc <= instructionValue[PC_WIDTH-1:0]; 
@@ -92,68 +101,93 @@ always @ (posedge clock)
    
    MEMORY memory ( .pc(pc),
 		   .instruction (instruction));
-
   
-   ALU alu (.accumulator(accumulator),
-            .register0Value (register0Value),
-            .register1Value (register1Value),	    
+   ALU alu (
+            .register1Value (register1Value),
+            .register2Value (register2Value),
             .opCode (opCode), 
             .aluResult(aluResult));
+
+
+   reg					 isALU;
+   assign isALU = ((opCode == ADD2) |
+                   (opCode == LSHIFT13 ) | 
+                   (opCode == RSHIFT15) | 
+                   (opCode == INCREMENT11) | 
+                   (opCode == DECREMENT14) ) ;
+
+   int 	 			 ii;
+
+always @(posedge clock)
+  if ((4'd1 == registerOut)&& isALU)
+     registers[1] <= aluResult; 
+  else if ((4'd1 == registerOut)&&(opCode == LOAD0))
+            registers[1] <= instructionValue;
+  else
+          registers[1] <= registers[1];
+
+always @(posedge clock)
+  if (4'd2 == registerOut)
+    begin 
+    if (isALU)
+       registers[2] <= aluResult; 
+    else if  (opCode == LOAD0)
+              registers[2] <= instructionValue;
+    else if  (opCode == LOADSWITCH7)
+             registers[2] <= switch;
+    end
    
-   always @(posedge clock)
-               if ((3'b000 == register0)&&(opCode == MOVE1))
-                  registers[0] <= accumulator;
-               else if ((3'b000 == register1)&&(opCode == COPY12))
-                  registers[0] <= registers[register0];
-               else
-                  registers[0] <= registers[0];		 
-   always @(posedge clock)
-               if ((3'b001 == register0)&&(opCode == MOVE1))
-                  registers[1] <= accumulator;
-               else if ((3'b001 == register1)&&(opCode == COPY12))
-                  registers[1] <= registers[register0];
-               else
-                  registers[1] <= registers[1];		 
 
 
-
-
-	      
-   always @(posedge clock)
-     casex (opCode)
-     LOADSWITCH7:  accumulator <= {15'b0,switch};
-     ADD2:         accumulator <= aluResult;
-     LOAD0:        accumulator <= instructionValue;
-     LOADREG10:    accumulator <= registers[register0];
-     LSHIFT13:     accumulator <= aluResult;
-     INCREMENT11:  accumulator <= accumulator + 1'b1;
-     RESET4:       accumulator <= 0;  
-     default:      accumulator <= accumulator;
-     endcase
-
+ 
+//always @(posedge clock)
+//     for (ii = 1 ; ii < NUMBER_OF_REGISTERS ; ii = ii+1) begin
+//       if (ii == registerOut)
+//           registers [ii] <= aluResult;
+//       else
+//           registers[ii] <= registers[ii];		
+//     end 
 
 initial 
-    $display ("SW OP PC Value ACCUM  Value1 Value1b ");
+  $display ("SW OP  PC Val R1 R2 RO     Value1           Value2 RS0 RS1 SOFFSET isALU  ");
    
 initial  
-  $monitor(  switch, " ", "%h",
+  $monitor(
+             switch, " %h",
              opCode, "   ", 
              pc,"  %h",
-             instructionValue, "  ",
+             instructionValue, " %h",
+	     register1, "  %h",
+	     register2, "  %h",
+	     registerOut, " ",
 //	     pcValue,"  ",
-             accumulator, "     ",
-             register1Value, "     %b",
-             register1Value, "  ---->",//"     \n",
+             register1Value, "     ",
+             register2Value, "     ",	   
+             //register1Value, "  ---->",//"     \n",
 	     returnStack[0],  "   ",
 	     returnStack [1], "   ",
-             stackOffset	     
-	     //"---------------------------------------------------" 
-             //aluResult
+             stackOffset, "     ",
+	     isALU
+	     
 );
 
-
-//   $monitor (register1Value);
- 
-
+//THIS ONE IS FOR TESTING THE REGISTER VALUES BEING SET
+/*
+initial 
+  $display ("PC   OP R1 R2 RO   isALU VAL  ALU         Reg1      Reg2");
+   
+initial
+   $monitor( pc, " ", 
+             opCode, "   %h", 
+	     register1, " %h",
+	     register2, " %h",
+	     registerOut, "       ",
+	     isALU, " " ,
+	     instructionValue, " ",
+             aluResult, " ",
+	     registers [1], " ",
+	     registers [2]
+             );
+*/   
 endmodule      
 
