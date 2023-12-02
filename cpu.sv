@@ -73,7 +73,7 @@ module CPU(clock,
 //Update the stacks
 always @ (posedge clock) 
   case (resetCode)
-    EXIT9:   stackOffset <= stackOffset - 1'b1;
+    RET:   stackOffset <= stackOffset - 1'b1;
     CALL8:   stackOffset <= stackOffset + 1'b1;
     RESET4:  stackOffset <= 0;
     default: stackOffset <= stackOffset; 
@@ -95,13 +95,13 @@ assign returnV =   returnStack [previousStackOffset];
 //Update the program counter   
 always @ (posedge clock) 
    case (resetCode)
-     EXIT9:         pc <= returnStack[stackOffset - 1'b1];
+     RET:         pc <= returnStack[stackOffset - 1'b1];
      CALL8:         pc <= instructionValue[PC_WIDTH-1:0];
-     IF0JUMP5:    if (registers[2] == 0) 
+     IF0JUMP:    if (registers[2] == 0) 
                       pc <= instructionValue;
                    else
                       pc <= pc + 1'b1;  
-     IF1JUMP6: if (registers[2] != 0) 
+     IF1JUMP: if (registers[2] != 0) 
                       pc <= instructionValue;
                       else
                       pc <= pc + 1;       
@@ -123,13 +123,13 @@ always @ (posedge clock)
 
 
    reg					 isALU;
-   assign isALU = ((opCode == ADD2) |
-                   (opCode == LSHIFT13 ) | 
-                   (opCode == RSHIFT15) | 
-                   (opCode == INCREMENT11) | 
-                   (opCode == LOAD0) | 
-                   (opCode == LOADSWITCH7) | 
-                   (opCode == DECREMENT14) )
+   assign isALU = ((opCode == ADD) |
+                   (opCode == LSHIFT ) | 
+                   (opCode == RSHIFT) | 
+                   (opCode == INC) | 
+                   (opCode == LOAD) | 
+                   (opCode == LOADSWITCH) | 
+                   (opCode == DECREMENT) )
                    ;
 	      
 always @(posedge clock)

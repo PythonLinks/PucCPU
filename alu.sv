@@ -17,15 +17,15 @@ module ALU(
 
 always @ (*)   
    case (opCode)
-     LOADSWITCH7:   aluResult <= switch ? 8'b1: 8'b0;
-     LOAD0:         aluResult <= instructionValue;
-     ADD2:          aluResult <= register1Value + register2Value;
-     LSHIFT13:      aluResult <= {register1Value[6:0],register1Value[7]};
-     RSHIFT15:      aluResult <= {register1Value[0], register1Value[7:1]};
-     INCREMENT11:   aluResult <= register1Value + 1'b1;
-     DECREMENT14:   aluResult <= register1Value -  1'b1;     
-     //AND8:         aluResult <= register1Value && register2Value;
-     //OR6:          aluResult <= register1Value | register2Value;
+     LOADSWITCH:   aluResult <= switch ? 8'b1: 8'b0;
+     LOAD:         aluResult <= instructionValue;
+     ADD:          aluResult <= register1Value + register2Value;
+     LSHIFT:      aluResult <= {register1Value[6:0],register1Value[7]};
+     RSHIFT:      aluResult <= {register1Value[0], register1Value[7:1]};
+     INC:   aluResult <= register1Value + 1'b1;
+     DECREMENT:   aluResult <= register1Value -  1'b1;     
+     //AND:         aluResult <= register1Value && register2Value;
+     //OR:          aluResult <= register1Value | register2Value;
      default:      aluResult <= 0;
    endcase // case (opCode)
    
