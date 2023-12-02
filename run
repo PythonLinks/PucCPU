@@ -1,0 +1,2 @@
+iverilog -g2009 -o out tb.sv ; vvp out | more ; rm out
+

@@ -12,7 +12,6 @@ module CPU(clock,
 	   switch,
 	   pc,
 	   register1Value,
-	   opCode
 );
 
 `include "parameters.h"
@@ -21,15 +20,19 @@ module CPU(clock,
    input  wire		               isReset;
    input  wire			       switch;
    output wire  [REGISTER_WIDTH-1:0]   register1Value;   
-   output wire	[OPCODE_WIDTH -1 :0]   opCode;
+   wire [OPCODE_WIDTH-1:0]             opCode;
 
    wire  [REGISTER_WIDTH-1:0]          register2Value;
    output reg  [PC_WIDTH-1:0]          pc;
    wire        [INSTRUCTION_WIDTH-1:0] instruction;
    wire        [REGISTER_WIDTH -1:0]   aluResult;
-   wire        [3:0]		       register1;
-   wire        [3:0]		       register2;
-   wire        [3:0]		       registerOut;   
+   wire [7:0]			       address1In;
+   wire [7:0]			       address2In;
+   wire [7:0]			       addressOut;   
+   
+   wire        [2:0]		       register1In;
+   wire        [2:0]		       register2In;
+   wire        [2:0]		       registerOut;   
 
    reg  [REGISTER_WIDTH-1:0]   registers[NUMBER_OF_REGISTERS-1:0];
    reg  [PC_WIDTH-1:0]	       returnStack[16];
@@ -39,21 +42,29 @@ module CPU(clock,
    wire [PC_WIDTH - 1 : 0]     pcPlusOne;   
    wire [PC_WIDTH - 1 : 0]     returnV;
 
+   //assign registers [0] = 0;
+   
    //NOW BEGIN THE ASSIGNMENTS
    assign pcPlusOne    = pc + 1;  
-   assign opCode       = instruction [INSTRUCTION_WIDTH-1:
+   assign opCode       = instruction [INSTRUCTION_WIDTH-4:
                                           INSTRUCTION_WIDTH -8];
-   assign register1 = instruction[INSTRUCTION_WIDTH-9:
-                                          INSTRUCTION_WIDTH -12];
-   assign register2 = instruction[INSTRUCTION_WIDTH-13:
+   assign address1In = instruction[INSTRUCTION_WIDTH-9:
                                           INSTRUCTION_WIDTH -16];
-   assign registerOut = instruction[INSTRUCTION_WIDTH-17:
-                                          INSTRUCTION_WIDTH -20];
-   assign instructionValue = instruction[7:0];
-// [REGISTER_WIDTH-24:0];
 
-   assign register2Value = registers[2];   
+   assign address2In = instruction[INSTRUCTION_WIDTH-17:
+                                          INSTRUCTION_WIDTH -24];
+   assign addressOut = instruction[INSTRUCTION_WIDTH-25:
+                                          INSTRUCTION_WIDTH - 32];
+   
+   assign instructionValue = instruction[INSTRUCTION_WIDTH-17:
+                                          INSTRUCTION_WIDTH - 24];
+
+   assign register1In = address1In[2:0];
+   assign register2In = address2In[2:0];
+   assign registerOut = addressOut[2:0];   
+   
    assign register1Value = registers[1];
+   assign register2Value = registers[2];   
    
    wire  [OPCODE_WIDTH - 1:0] 	 resetCode;
    
@@ -103,9 +114,11 @@ always @ (posedge clock)
 		   .instruction (instruction));
   
    ALU alu (
+            .opCode (opCode), 
             .register1Value (register1Value),
             .register2Value (register2Value),
-            .opCode (opCode), 
+	    .instructionValue (instructionValue),
+	    .switch (switch),
             .aluResult(aluResult));
 
 
@@ -114,31 +127,30 @@ always @ (posedge clock)
                    (opCode == LSHIFT13 ) | 
                    (opCode == RSHIFT15) | 
                    (opCode == INCREMENT11) | 
-                   (opCode == DECREMENT14) ) ;
-
-   int 	 			 ii;
-
+                   (opCode == LOAD0) | 
+                   (opCode == LOADSWITCH7) | 
+                   (opCode == DECREMENT14) )
+                   ;
+	      
 always @(posedge clock)
-  if ((4'd1 == registerOut)&& isALU)
-     registers[1] <= aluResult; 
-  else if ((4'd1 == registerOut)&&(opCode == LOAD0))
-            registers[1] <= instructionValue;
-  else
-          registers[1] <= registers[1];
+  case ({registerOut,isALU })
+    {3'd1,TRUE}: begin
+         registers[1] <= aluResult;
+         registers[2] <= registers[2];
+         end
+       
+    {3'd2,TRUE}: begin
+         registers[1] <= registers[1];
+         registers[2] <= aluResult;       
+         end
 
-always @(posedge clock)
-  if (4'd2 == registerOut)
-    begin 
-    if (isALU)
-       registers[2] <= aluResult; 
-    else if  (opCode == LOAD0)
-              registers[2] <= instructionValue;
-    else if  (opCode == LOADSWITCH7)
-             registers[2] <= switch;
-    end
-   
-
-
+    default:
+         begin
+         registers[1] <= registers[1];
+         registers[2] <= registers[2];
+         end
+    endcase
+       
  
 //always @(posedge clock)
 //     for (ii = 1 ; ii < NUMBER_OF_REGISTERS ; ii = ii+1) begin
@@ -149,7 +161,7 @@ always @(posedge clock)
 //     end 
 
 initial 
-  $display ("SW OP  PC Val R1 R2 RO     Value1           Value2 RS0 RS1 SOFFSET isALU  ");
+  $display ("SW OP  PC Val R1 R2 RO Val1 Val2 ALU RG0 RG1 SOFFSET isALU  ");
    
 initial  
   $monitor(
@@ -157,15 +169,14 @@ initial
              opCode, "   ", 
              pc,"  %h",
              instructionValue, " %h",
-	     register1, "  %h",
-	     register2, "  %h",
-	     registerOut, " ",
-//	     pcValue,"  ",
-             register1Value, "     ",
-             register2Value, "     ",	   
-             //register1Value, "  ---->",//"     \n",
-	     returnStack[0],  "   ",
-	     returnStack [1], "   ",
+	     register1In, "  %h",
+	     register2In, "  %h",
+	     aluResult, " ",
+	     registerOut, "  ",
+             register1Value, "  ",
+             register2Value, "  ",	   
+             register1Value, " ",
+	     register2Value, " ",
              stackOffset, "     ",
 	     isALU
 	     
@@ -179,8 +190,8 @@ initial
 initial
    $monitor( pc, " ", 
              opCode, "   %h", 
-	     register1, " %h",
-	     register2, " %h",
+	     register1In, " %h",
+	     register2In, " %h",
 	     registerOut, "       ",
 	     isALU, " " ,
 	     instructionValue, " ",

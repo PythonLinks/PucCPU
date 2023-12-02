@@ -10,14 +10,12 @@ reg isReset;
 reg		         	   switch;
 wire [REGISTER_WIDTH-1 : 0]	   register1Value;   
 wire  [PC_WIDTH-1:0]               pc;
-wire [OPCODE_WIDTH -1:0] opCode;
    
 CPU cpu (.clock(clock),
 	 .isReset(isReset),
 	 .switch (switch),
 	 .pc (pc),
-	 .register1Value(register1Value),
-	 .opCode(opCode)
+	 .register1Value(register1Value)
 
 );
 
