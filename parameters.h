@@ -13,21 +13,18 @@ parameter FALSE  = 1'b0;
 
 
 enum bit [OPCODE_WIDTH-1:0] {
-    LOAD,
-    MOVE1,
-    ADD,
-    JUMP3,
-    RESET4,
-    IF0JUMP,
-    IF1JUMP,
-    LOADSWITCH,
-    CALL8,
-    RET,
-    LOADREG10,
-    INC,
-    COPY12,
-    LSHIFT,
-    DECREMENT,
-    RSHIFT } opCodes;
+    ADD=8,         //h08   
+    RESET=18,      //h18
+    IF1JUMP=19,    //h13
+    CALL=21,       //h15
+    RET=23,        //h17
+    DECREMENT=25,  //h19
+    LOAD=26,       //h1a
+    LOADSWITCH=27, //h1b
+    IF0JUMP=28,    //h1c
+    INC=29,        //h1d
+    LSHIFT=30,     //h1e
+    RSHIFT=31      //h1f
+    } opCodes;
 
 

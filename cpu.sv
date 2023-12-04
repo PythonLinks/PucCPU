@@ -68,14 +68,14 @@ module CPU(clock,
    
    wire  [OPCODE_WIDTH - 1:0] 	 resetCode;
    
-   assign resetCode = isReset ? RESET4 : opCode; 
+   assign resetCode = isReset ? RESET : opCode; 
    
 //Update the stacks
 always @ (posedge clock) 
   case (resetCode)
     RET:   stackOffset <= stackOffset - 1'b1;
-    CALL8:   stackOffset <= stackOffset + 1'b1;
-    RESET4:  stackOffset <= 0;
+    CALL:   stackOffset <= stackOffset + 1'b1;
+    RESET:  stackOffset <= 0;
     default: stackOffset <= stackOffset; 
   endcase          
 
@@ -83,7 +83,7 @@ initial
   stackOffset <= 0;
          
 always @(posedge clock)
-  if (opCode == CALL8)
+  if (opCode == CALL)
     returnStack [stackOffset] <= pc + 1;
   else
     returnStack [stackOffset] <= returnStack [stackOffset] ;
@@ -96,7 +96,7 @@ assign returnV =   returnStack [previousStackOffset];
 always @ (posedge clock) 
    case (resetCode)
      RET:         pc <= returnStack[stackOffset - 1'b1];
-     CALL8:         pc <= instructionValue[PC_WIDTH-1:0];
+     CALL:         pc <= instructionValue[PC_WIDTH-1:0];
      IF0JUMP:    if (registers[2] == 0) 
                       pc <= instructionValue;
                    else
@@ -105,8 +105,7 @@ always @ (posedge clock)
                       pc <= instructionValue;
                       else
                       pc <= pc + 1;       
-     JUMP3   : pc <= instructionValue[PC_WIDTH-1:0]; 
-     RESET4  : pc <= 4'd0;
+     RESET  : pc <= 4'd0;
      default:  pc <= pc + 1'b1;  
    endcase
    
