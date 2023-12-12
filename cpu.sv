@@ -160,7 +160,7 @@ always @(posedge clock)
 //     end 
 
 initial 
-  $display ("SW OP  PC Val R1 R2 RO Val1 Val2 ALU RG0 RG1 SOFFSET isALU  ");
+  $display ("SW OP  PC Val R1 R2 RO Val1 Val2 ALU RG1 RG2 SOFFSET isALU  ");
    
 initial  
   $monitor(
