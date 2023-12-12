@@ -5,6 +5,7 @@
 `ifdef IVERILOG
 `include "memory.sv"
 `include "alu.sv"
+`include "pc.sv"
 `endif
   
 module CPU(clock,
@@ -19,11 +20,11 @@ module CPU(clock,
    input  wire		               clock;
    input  wire		               isReset;
    input  wire			       switch;
-   output wire  [REGISTER_WIDTH-1:0]   register1Value;   
+   output wire  [PC_WIDTH-1:0]                pc;   
+   output wire  [REGISTER_WIDTH-1:0]   register1Value;
+   
    wire [OPCODE_WIDTH-1:0]             opCode;
-
    wire  [REGISTER_WIDTH-1:0]          register2Value;
-   output reg  [PC_WIDTH-1:0]          pc;
    wire        [INSTRUCTION_WIDTH-1:0] instruction;
    wire        [REGISTER_WIDTH -1:0]   aluResult;
    wire [7:0]			       address1In;
@@ -35,17 +36,19 @@ module CPU(clock,
    wire        [2:0]		       registerOut;   
 
    reg  [REGISTER_WIDTH-1:0]   registers[NUMBER_OF_REGISTERS-1:0];
-   reg  [PC_WIDTH-1:0]	       returnStack[16];
-   reg  [3:0]		       stackOffset;
-   reg  [3:0]	               previousStackOffset;
+
    wire [VALUE_WIDTH - 1 :0]   instructionValue;
-   wire [PC_WIDTH - 1 : 0]     pcPlusOne;   
-   wire [PC_WIDTH - 1 : 0]     returnV;
+
 
    //assign registers [0] = 0;
+
+  //Since we can get a reset instruction
+  //Or a reset by pushbutton, we have to update the instruction.  
+  wire  [OPCODE_WIDTH - 1:0] 	 resetCode;   
+  assign resetCode = isReset ? RESET : opCode; 
    
    //NOW BEGIN THE ASSIGNMENTS
-   assign pcPlusOne    = pc + 1;  
+
    assign opCode       = instruction [INSTRUCTION_WIDTH-4:
                                           INSTRUCTION_WIDTH -8];
    assign address1In = instruction[INSTRUCTION_WIDTH-9:
@@ -66,48 +69,12 @@ module CPU(clock,
    assign register1Value = registers[1];
    assign register2Value = registers[2];   
    
-   wire  [OPCODE_WIDTH - 1:0] 	 resetCode;
+   PC pcModule (.clock(clock),
+		.resetCode (resetCode),
+		.instructionValue(instructionValue),
+		.registerValue(register2Value),
+		.pc (pc));
    
-   assign resetCode = isReset ? RESET : opCode; 
-   
-//Update the stacks
-always @ (posedge clock) 
-  case (resetCode)
-    RET:   stackOffset <= stackOffset - 1'b1;
-    CALL:   stackOffset <= stackOffset + 1'b1;
-    RESET:  stackOffset <= 0;
-    default: stackOffset <= stackOffset; 
-  endcase          
-
-initial 
-  stackOffset <= 0;
-         
-always @(posedge clock)
-  if (opCode == CALL)
-    returnStack [stackOffset] <= pc + 1;
-  else
-    returnStack [stackOffset] <= returnStack [stackOffset] ;
-
-assign previousStackOffset = stackOffset ? (stackOffset -1) : 0;
-    
-assign returnV =   returnStack [previousStackOffset];
-   
-//Update the program counter   
-always @ (posedge clock) 
-   case (resetCode)
-     RET:         pc <= returnStack[stackOffset - 1'b1];
-     CALL:         pc <= instructionValue[PC_WIDTH-1:0];
-     IF0JUMP:    if (registers[2] == 0) 
-                      pc <= instructionValue;
-                   else
-                      pc <= pc + 1'b1;  
-     IF1JUMP: if (registers[2] != 0) 
-                      pc <= instructionValue;
-                      else
-                      pc <= pc + 1;       
-     RESET  : pc <= 4'd0;
-     default:  pc <= pc + 1'b1;  
-   endcase
    
    MEMORY memory ( .pc(pc),
 		   .instruction (instruction));
@@ -176,7 +143,6 @@ initial
              register2Value, "  ",	   
              register1Value, " ",
 	     register2Value, " ",
-             stackOffset, "     ",
 	     isALU
 	     
 );
