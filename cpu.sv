@@ -40,7 +40,7 @@ module CPU(clock,
    wire [VALUE_WIDTH - 1 :0]   instructionValue;
 
 
-   //assign registers [0] = 0;
+   
 
   //Since we can get a reset instruction
   //Or a reset by pushbutton, we have to update the instruction.  
@@ -97,34 +97,29 @@ module CPU(clock,
                    (opCode == LOADSWITCH) | 
                    (opCode == DECREMENT) )
                    ;
-	      
-always @(posedge clock)
-  case ({registerOut,isALU })
-    {3'd1,TRUE}: begin
+   
+//Sadly generate does not seem to work in iVerilog
+always @(posedge clock) begin
+  registers [0] <= 0;   
+  if ((registerOut == 1) & isALU)     
          registers[1] <= aluResult;
-         registers[2] <= registers[2];
-         end
-       
-    {3'd2,TRUE}: begin
-         registers[1] <= registers[1];
-         registers[2] <= aluResult;       
-         end
+  if ((registerOut == 2) & isALU)     
+         registers[2] <= aluResult;
+  if ((registerOut == 3) & isALU)     
+         registers[3] <= aluResult;
+  if ((registerOut == 4) & isALU)     
+         registers[4] <= aluResult;
+  if ((registerOut == 5) & isALU)     
+         registers[5] <= aluResult;
+  if ((registerOut == 6) & isALU)     
+         registers[6] <= aluResult;
+  if ((registerOut == 7) & isALU)     
+         registers[7] <= aluResult;
+end   
 
-    default:
-         begin
-         registers[1] <= registers[1];
-         registers[2] <= registers[2];
-         end
-    endcase
-       
- 
-//always @(posedge clock)
-//     for (ii = 1 ; ii < NUMBER_OF_REGISTERS ; ii = ii+1) begin
-//       if (ii == registerOut)
-//           registers [ii] <= aluResult;
-//       else
-//           registers[ii] <= registers[ii];		
-//     end 
+
+   
+
 
 initial 
   $display ("SW OP  PC Val R1 R2 RO Val1 Val2 ALU RG1 RG2 SOFFSET isALU  ");
