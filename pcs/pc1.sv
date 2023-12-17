@@ -1,5 +1,5 @@
-module pc#(
-    parameter INSTR_ADDR_SIZE = 5
+ module pc#(
+    parameter INSTR_ADDR_SIZE = 8
 ) ( 
    CLK,
    jump_code, 
@@ -8,11 +8,11 @@ module pc#(
    instruction_address
 );
 
-enum bit [1:0] {
-    RESET=0,      
-    JUMP=1,    
-    RET=2,
-    DEFAULT = 3		
+   enum bit [4:0] {
+    RESET=5'd0,      
+    JUMP=5'd1,    
+    RET=5'd2,
+    DEFAULT = 5'd3         
     } opCodes;
    
     input CLK;
@@ -24,7 +24,7 @@ enum bit [1:0] {
       case (jump_code)
         RESET:  instruction_address <= {INSTR_ADDR_SIZE{1'b0}}; 
         JUMP:   instruction_address <= jump_address;
-        RET:    instruction_address <= return_address;	
+        RET:    instruction_address <= return_address;  
         default: instruction_address<= instruction_address + 1;
      
       endcase 
