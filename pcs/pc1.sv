@@ -8,15 +8,15 @@
    instruction_address
 );
 
-   enum bit [4:0] {
-    RESET=5'd0,      
-    JUMP=5'd1,    
-    RET=5'd2,
-    DEFAULT = 5'd3         
+   enum bit [1:0] {
+    RESET=2'd0,      
+    JUMP=2'd1,    
+    RET=2'd2,
+    DEFAULT = 2'd3         
     } opCodes;
    
     input CLK;
-    input [4:0] jump_code;
+   input [1:0] jump_code;
     input [INSTR_ADDR_SIZE - 1:0] jump_address, return_address;
     output reg [INSTR_ADDR_SIZE - 1:0] instruction_address;
 
