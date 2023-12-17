@@ -2,22 +2,30 @@ module pc#(
     parameter INSTR_ADDR_SIZE = 5
 ) ( 
    CLK,
-   OP_CODE, 
-   JMP_ADDR, 
-   RET_ADDR, 
-   INSTR_ADDR
+   jump_code, 
+   jump_address, 
+   return_address, 
+   instruction_address
 );
+
+enum bit [1:0] {
+    RESET=0,      
+    JUMP=1,    
+    RET=2,
+    DEFAULT = 3		
+    } opCodes;
+   
     input CLK;
-    input [1:0] OP_CODE;
-    input [INSTR_ADDR_SIZE - 1:0] JMP_ADDR, RET_ADDR;
-    output reg [INSTR_ADDR_SIZE - 1:0] INSTR_ADDR;
+    input [4:0] jump_code;
+    input [INSTR_ADDR_SIZE - 1:0] jump_address, return_address;
+    output reg [INSTR_ADDR_SIZE - 1:0] instruction_address;
 
     always @(posedge CLK) 
-      case (OP_CODE)
-        2'd0:  INSTR_ADDR <= {INSTR_ADDR_SIZE{1'b0}}; 
-        2'd1: INSTR_ADDR <= JMP_ADDR;
-        2'd2: INSTR_ADDR <= RET_ADDR;
-        default: INSTR_ADDR <= INSTR_ADDR + 1;
+      case (jump_code)
+        RESET:  instruction_address <= {INSTR_ADDR_SIZE{1'b0}}; 
+        JUMP:   instruction_address <= jump_address;
+        RET:    instruction_address <= return_address;	
+        default: instruction_address<= instruction_address + 1;
      
       endcase 
 endmodule

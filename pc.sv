@@ -49,8 +49,8 @@ assign returnV =   returnStack [previousStackOffset];
 always @(posedge clock)
   if (resetCode == CALL)
     returnStack [stackOffset] <= pc + 1;
-  else  //Not really needed
-    returnStack [stackOffset] <= returnStack [stackOffset] ;
+//  else  //Not really needed
+//    returnStack [stackOffset] <= returnStack [stackOffset] ;
    
  assign pcPlusOne    = pc + 1;  
    
@@ -62,13 +62,13 @@ always @ (posedge clock)
      IF0JUMP:    if (registerValue == 0) 
                       pc <= instructionValue;
                    else
-                      pc <= pc + 1'b1;  
+                      pc <= pcPlusOne;  
      IF1JUMP:    if (registerValue != 0) 
                       pc <= instructionValue;
                       else
-                      pc <= pc + 1;       
+                      pc <= pcPlusOne;       
      RESET  :    pc <= 4'd0;
-     default:    pc <= pc + 1'b1;  
+     default:    pc <= pcPlusOne;  
    endcase
 
 endmodule   
