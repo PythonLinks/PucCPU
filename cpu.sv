@@ -50,7 +50,7 @@ module CPU(clock,
    
    //NOW BEGIN THE ASSIGNMENTS
 
-   assign opCode       = instruction [INSTRUCTION_WIDTH-4:
+   assign opCode       = instruction [INSTRUCTION_WIDTH-3:
                                           INSTRUCTION_WIDTH -8];
    assign address1In = instruction[INSTRUCTION_WIDTH-9:
                                           INSTRUCTION_WIDTH -16];

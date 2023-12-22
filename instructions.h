@@ -26,11 +26,12 @@ enum bit [OPCODE_WIDTH-1:0] {
   RET  = 24,       //h18
   RET0 = 25, 
   RET1 = 26,
-  LOAD = 27,       //h1b
+    RESET = 27,      
   LOADSWITCH = 28, //h1c
   INC = 29,        //h1d
   LSHIFT = 30,      //1e
   RSHIFT = 31,      //1f
   DECREMENT = 32,   //  
-  RESET = 33  
+  LOAD = 33       //h21
+ 
     } opCodes;
