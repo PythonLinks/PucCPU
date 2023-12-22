@@ -1,27 +1,36 @@
-`define	AND		8'h00
-`define ANDN	8'h01
-`define OR		8'h02
-`define ORN		8'h03
-`define XOR		 8'h04
-`define XORN	 8'h05
-`define NOT		 8'h06
-`define ADD		 8'h07
-`define SUB		 8'h08
-`define MUL		 8'h09
-`define DIV		 8'h0A
-`define MOD		 8'h0B
-`define GT		 8'h0C
-`define GE		 8'h0D
-`define EQ		 8'h0E
-`define NE		 8'h0F
-`define LE		 8'h10
-`define LT		 8'h11
-`define JMP		 8'h12
-`define JMP0	 8'h13
-`define JMP1	 8'h14
-`define CAL		 8'h15
-`define CAL0	 8'h16
-`define CAL1	 8'h17
-`define RET		 8'h18
-`define RET0	 8'h19
-`define RET1	 8'h1A
+enum bit [OPCODE_WIDTH-1:0] {
+  AND  = 0, 
+  ANDN = 1, 
+  OR   = 2, 
+  ORN  = 3, 
+  XOR  = 4, 
+  XORN = 5, 
+  NOT  = 6, 
+  ADD  = 7, 
+  SUB  = 8, 
+  MUL  = 9, 
+  DIV  = 10, 
+  MOD  = 11, 
+  GT   = 12, 
+  GE   = 13, 
+  EQ   = 14, 
+  NE   = 15, 
+  LE   = 16, 
+  LT   = 17, 
+  JMP  = 18, 
+  IF0JUMP = 19,     //h13
+  IF1JUMP = 20,     //h14
+  CALL  = 21,      //h15
+  CAL0 = 22, 
+  CAL1 = 23, 
+  RET  = 24,       //h18
+  RET0 = 25, 
+  RET1 = 26,
+  LOAD = 27,       //h1b
+  LOADSWITCH = 28, //h1c
+  INC = 29,        //h1d
+  LSHIFT = 30,      //1e
+  RSHIFT = 31,      //1f
+  DECREMENT = 32,   //  
+  RESET = 33  
+    } opCodes;
