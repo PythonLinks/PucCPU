@@ -30,6 +30,10 @@ module CPU(clock,
    wire [7:0]			       address1In;
    wire [7:0]			       address2In;
    wire [7:0]			       addressOut;   
+
+   wire [1:0]			       address1Type;
+   wire [1:0]			       address2Type;
+   wire [1:0]			       outType;   
    
    wire        [2:0]		       register1In;
    wire        [2:0]		       register2In;
@@ -38,10 +42,7 @@ module CPU(clock,
    reg  [REGISTER_WIDTH-1:0]   registers[NUMBER_OF_REGISTERS-1:0];
 
    wire [VALUE_WIDTH - 1 :0]   instructionValue;
-
-
-   
-
+  
   //Since we can get a reset instruction
   //Or a reset by pushbutton, we have to update the instruction.  
   wire  [OPCODE_WIDTH - 1:0] 	 resetCode;   
@@ -62,6 +63,13 @@ module CPU(clock,
    assign instructionValue = instruction[INSTRUCTION_WIDTH-17:
                                           INSTRUCTION_WIDTH - 24];
 
+   assign address1Type = instruction[5:4];
+   
+     assign address2Type = instruction[3:2];
+   
+     assign outType = instruction[1:0];
+			 
+   
    assign register1In = address1In[2:0];
    assign register2In = address2In[2:0];
    assign registerOut = addressOut[2:0];   
