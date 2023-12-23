@@ -6,6 +6,7 @@
 `include "memory.sv"
 `include "alu.sv"
 `include "pc.sv"
+`include "parse.sv"
 `endif
   
 module CPU(clock,
@@ -20,13 +21,17 @@ module CPU(clock,
    input  wire		               clock;
    input  wire		               isReset;
    input  wire			       switch;
-   output wire  [PC_WIDTH-1:0]                pc;   
    output wire  [REGISTER_WIDTH-1:0]   register1Value;
-   
-   wire [OPCODE_WIDTH-1:0]             opCode;
    wire  [REGISTER_WIDTH-1:0]          register2Value;
-   wire        [INSTRUCTION_WIDTH-1:0] instruction;
    wire        [REGISTER_WIDTH -1:0]   aluResult;
+   reg  [REGISTER_WIDTH-1:0]   registers[NUMBER_OF_REGISTERS-1:0];
+
+
+   output wire  [PC_WIDTH-1:0]         pc;
+   
+   //And now for the instruction parsing   
+   wire        [INSTRUCTION_WIDTH-1:0] instruction;
+   wire [OPCODE_WIDTH-1:0]             opCode;
    wire [7:0]			       address1In;
    wire [7:0]			       address2In;
    wire [7:0]			       addressOut;   
@@ -39,8 +44,6 @@ module CPU(clock,
    wire        [2:0]		       register2In;
    wire        [2:0]		       registerOut;   
 
-   reg  [REGISTER_WIDTH-1:0]   registers[NUMBER_OF_REGISTERS-1:0];
-
    wire [VALUE_WIDTH - 1 :0]   instructionValue;
   
   //Since we can get a reset instruction
@@ -48,31 +51,20 @@ module CPU(clock,
   wire  [OPCODE_WIDTH - 1:0] 	 resetCode;   
   assign resetCode = isReset ? RESET : opCode; 
    
-   //NOW BEGIN THE ASSIGNMENTS
 
-   assign opCode       = instruction [INSTRUCTION_WIDTH-3:
-                                          INSTRUCTION_WIDTH -8];
-   assign address1In = instruction[INSTRUCTION_WIDTH-9:
-                                          INSTRUCTION_WIDTH -16];
-
-   assign address2In = instruction[INSTRUCTION_WIDTH-17:
-                                          INSTRUCTION_WIDTH -24];
-   assign addressOut = instruction[INSTRUCTION_WIDTH-25:
-                                          INSTRUCTION_WIDTH - 32];
+  Parser parser(instruction,
+		opCode,
+		address1In,
+		address2In,
+		addressOut,
+		address1Type,
+		address2Type,
+		outType,
+		register1In,
+		register2In,
+		registerOut,
+		instructionValue);
    
-   assign instructionValue = instruction[INSTRUCTION_WIDTH-17:
-                                          INSTRUCTION_WIDTH - 24];
-
-   assign address1Type = instruction[5:4];
-   
-     assign address2Type = instruction[3:2];
-   
-     assign outType = instruction[1:0];
-			 
-   
-   assign register1In = address1In[2:0];
-   assign register2In = address2In[2:0];
-   assign registerOut = addressOut[2:0];   
    
    assign register1Value = registers[1];
    assign register2Value = registers[2];   
