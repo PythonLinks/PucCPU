@@ -10,7 +10,16 @@ parameter VALUE_WIDTH = 8;
 
 parameter TRUE   = 1'b1;
 parameter FALSE  = 1'b0;
+parameter ZERO = 8'b0;
+
+parameter UseRegister = 2'b0;
+parameter useBit = 2'b01;
+parameter useMemory = 2'b10;
+parameter useImmediate = 2'b11;
+
 
 `include "instructions.h"
 
-
+`ifndef PBL
+ `define PBL 8
+`endif

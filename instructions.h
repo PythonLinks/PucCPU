@@ -30,8 +30,7 @@ enum bit [OPCODE_WIDTH-1:0] {
   LOADSWITCH = 28, //h1c
   INC = 29,        //h1d
   LSHIFT = 30,      //1e
-  RSHIFT = 31,      //1f
+  LOAD = 31,       //h1f
   DECREMENT = 32,   //  
-  LOAD = 33       //h21
- 
+  RSHIFT = 33      //21
     } opCodes;

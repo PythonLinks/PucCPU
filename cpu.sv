@@ -1,12 +1,20 @@
 `default_nettype none
 
-`define IVERILOG
 
-`ifdef IVERILOG
+//`define IVERILOG
+
+//`ifdef IVERILOG
 `include "memory.sv"
 `include "alu.sv"
 `include "pc.sv"
 `include "parse.sv"
+//`endif
+
+
+`ifdef PBL
+`include "../PBLcpu/Modules/ram_bit.v"
+`include "../PBLcpu/Modules/alu.v"
+`include "../PBLcpu/Modules/flag_reg.v"
 `endif
   
 module CPU(clock,
@@ -17,6 +25,9 @@ module CPU(clock,
 );
 
 `include "parameters.h"
+
+
+
    
    input  wire		               clock;
    input  wire		               isReset;
@@ -51,7 +62,7 @@ module CPU(clock,
   wire  [OPCODE_WIDTH - 1:0] 	 resetCode;   
   assign resetCode = isReset ? RESET : opCode; 
    
-
+   
   Parser parser(instruction,
 		opCode,
 		address1In,
@@ -66,8 +77,8 @@ module CPU(clock,
 		instructionValue);
    
    
-   assign register1Value = registers[1];
-   assign register2Value = registers[2];   
+   assign register1Value = registers[register1In];
+   assign register2Value = registers[register2In];   
    
    PC pcModule (.clock(clock),
 		.resetCode (resetCode),
@@ -78,7 +89,81 @@ module CPU(clock,
    
    MEMORY memory ( .pc(pc),
 		   .instruction (instruction));
-  
+
+
+`ifdef PBL
+
+
+// Here we define the bit memory
+
+wire port_a_out;
+wire port_b_out;
+wire port_c_data;
+wire port_c_we;
+
+assign port_c_we = (  outType == useBit) ? TRUE: FALSE;
+   
+ram_bit bitMemory(
+    .clk(clock),
+
+    .port_a_address(address1In),
+    .port_a_out(port_a_out),
+
+    .port_b_address(address2In),
+    .port_b_out(port_b_out),
+
+    .port_c_address(addressOut),
+    .port_c_data(aluResult[0]),
+    .port_c_we(port_c_we)
+);
+
+
+   
+// And here we define the flags   
+wire oldCarryFlag;
+wire oldZFlag;
+wire oldBorrowFlag;
+wire newCarryFlag;
+wire newBorrowFlag; 
+wire newZFlag;
+	       
+flag_reg flags(
+    .clk(clock),
+    .flag_rst(isReset),
+    .flag_c_in(newCarryFlag),
+    .flag_z_in(newZFlag),
+    .flag_b_in(newBorrowFlag),
+    .flag_c(oldCarryFlag),
+    .flag_z(oldZFlag),
+    .flag_b(oldBorrowFlag)
+);
+
+
+//And now the alu.    
+   wire [7:0] longOpCode;
+   assign longOpCode = {3'b000,opCode};
+   
+alu ALU 
+   (
+    .op_code(longOpCode),
+    .source1_choice(address1Type),
+    .bit_mem_a(port_a_out),
+    .word_mem_a(ZERO),
+    .rf_a(register1Value),
+    .imm_a(instructionValue),
+    .source2_choice(address2Type),
+    .bit_mem_b(port_b_out),
+    .word_mem_b(ZERO),
+    .rf_b(register2Value),
+    .imm_b(instructionValue),
+    .alu_c_in(oldCarryFlag),
+    .alu_b_in(oldBorrowFlag),
+    .alu_c_out(newCarryFlag),
+    .alu_b_out(newBorrowFlag),
+    .alu_out(aluResult)
+);
+
+`else	       
    ALU alu (
             .opCode (opCode), 
             .register1Value (register1Value),
@@ -87,7 +172,8 @@ module CPU(clock,
 	    .switch (switch),
             .aluResult(aluResult));
 
-
+`endif // !`ifdef PBL
+	       
    reg					 isALU;
    assign isALU = ((opCode == ADD) |
                    (opCode == LSHIFT ) | 
@@ -117,10 +203,24 @@ always @(posedge clock) begin
          registers[7] <= aluResult;
 end   
 
+// FOR DEBUGGING THE PBL CPU   
+initial
+  $display ("pc val add type aluIn Result    we");
 
    
+initial 
+  $monitor (pc, " ",
+            instructionValue, 
+	    addressOut, "    ",
+            outType, " ",
+	    ALU.in_a, "      ",
+	    aluResult, "       ",
+	    port_c_we
+            );
+   
 
-
+//THIS ONE IS FOR MY CPU, WATCHING SHIFTS AND INCREMENTS
+/*   
 initial 
   $display ("SW OP  PC Val R1 R2 RO Val1 Val2 ALU RG1 RG2 SOFFSET isALU  ");
    
@@ -143,7 +243,7 @@ initial
 );
 
 //THIS ONE IS FOR TESTING THE REGISTER VALUES BEING SET
-/*
+
 initial 
   $display ("PC   OP R1 R2 RO   isALU VAL  ALU         Reg1      Reg2");
    
@@ -159,6 +259,7 @@ initial
 	     registers [1], " ",
 	     registers [2]
              );
-*/   
+*/
+   
 endmodule      
 

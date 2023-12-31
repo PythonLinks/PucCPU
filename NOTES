@@ -1,0 +1,7 @@
+REGISTER 1 in and REgister2 in used to be 1 and 2.  Need to be assigned if not pbl.
+
+Reset drives the reset code, becasue there is a reset instruction.
+
+Make sure the tiem scales are all the same.
+
+Had to switch shifts left and load. 
