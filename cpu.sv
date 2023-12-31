@@ -5,7 +5,6 @@
 
 //`ifdef IVERILOG
 `include "memory.sv"
-`include "alu.sv"
 `include "pc.sv"
 `include "parse.sv"
 //`endif
@@ -13,8 +12,11 @@
 
 `ifdef PBL
 `include "../PBLcpu/Modules/ram_bit.v"
+`include "../PBLcpu/Modules/ram_word.v"
 `include "../PBLcpu/Modules/alu.v"
 `include "../PBLcpu/Modules/flag_reg.v"
+`else
+  `include "alu.sv"
 `endif
   
 module CPU(clock,
@@ -53,7 +55,8 @@ module CPU(clock,
    
    wire        [2:0]		       register1In;
    wire        [2:0]		       register2In;
-   wire        [2:0]		       registerOut;   
+   wire        [2:0]		       registerOut;
+   wire        [2:0]		       registerWithAddress;      
 
    wire [VALUE_WIDTH - 1 :0]   instructionValue;
   
@@ -61,8 +64,14 @@ module CPU(clock,
   //Or a reset by pushbutton, we have to update the instruction.  
   wire  [OPCODE_WIDTH - 1:0] 	 resetCode;   
   assign resetCode = isReset ? RESET : opCode; 
+  wire [REGISTER_WIDTH -1 : 0]	   actualRegisterOut;
+ 
+ assign actualRegisterOut = (registerWithAddress == 3'b000) ? 
+                             registerOut:
+                            registerWithAddress ;
    
-   
+
+ 
   Parser parser(instruction,
 		opCode,
 		address1In,
@@ -74,6 +83,7 @@ module CPU(clock,
 		register1In,
 		register2In,
 		registerOut,
+		registerWithAddress,
 		instructionValue);
    
    
@@ -92,16 +102,37 @@ module CPU(clock,
 
 
 `ifdef PBL
+wire  wordWriteEnable;
+wire  registerWriteEnable;
+wire  bitWriteEnable;
 
+assign bitWriteEnable    = (  outType == useBit) ? TRUE: FALSE;
+assign wordWriteEnable   = (  outType == useMemory) ? TRUE: FALSE;
+assign registerWriteEnable = (  outType == useRegister) ? TRUE: FALSE;   
+   
 
+wire [MEMORY_WIDTH-1:0] wordMemoryA;
+wire [MEMORY_WIDTH-1:0] wordMemoryB;
+   
+// Here we have the word memory
+ram_word wordMemory (
+    .clk(clock),
+    .port_a_address(address1In),
+    .port_a_out(wordMemoryA),
+    .port_b_address(address2In),
+    .port_b_out(wordMemoryB),
+    .port_c_address(addressOut),
+    .port_c_data(aluResult),
+    .port_c_we(wordWriteEnable)
+);
+
+   
 // Here we define the bit memory
 
 wire port_a_out;
 wire port_b_out;
 wire port_c_data;
-wire port_c_we;
 
-assign port_c_we = (  outType == useBit) ? TRUE: FALSE;
    
 ram_bit bitMemory(
     .clk(clock),
@@ -114,11 +145,10 @@ ram_bit bitMemory(
 
     .port_c_address(addressOut),
     .port_c_data(aluResult[0]),
-    .port_c_we(port_c_we)
+    .port_c_we(bitWriteEnable)
 );
 
 
-   
 // And here we define the flags   
 wire oldCarryFlag;
 wire oldZFlag;
@@ -148,12 +178,12 @@ alu ALU
     .op_code(longOpCode),
     .source1_choice(address1Type),
     .bit_mem_a(port_a_out),
-    .word_mem_a(ZERO),
+    .word_mem_a(wordMemoryA),
     .rf_a(register1Value),
     .imm_a(instructionValue),
     .source2_choice(address2Type),
     .bit_mem_b(port_b_out),
-    .word_mem_b(ZERO),
+    .word_mem_b(wordMemoryB),
     .rf_b(register2Value),
     .imm_b(instructionValue),
     .alu_c_in(oldCarryFlag),
@@ -174,7 +204,10 @@ alu ALU
 
 `endif // !`ifdef PBL
 	       
-   reg					 isALU;
+reg					 isALU;
+`ifdef PBL
+   assign isALU = opCode[4];
+`else
    assign isALU = ((opCode == ADD) |
                    (opCode == LSHIFT ) | 
                    (opCode == RSHIFT) | 
@@ -183,41 +216,51 @@ alu ALU
                    (opCode == LOADSWITCH) | 
                    (opCode == DECREMENT) )
                    ;
+`endif
    
 //Sadly generate does not seem to work in iVerilog
 always @(posedge clock) begin
   registers [0] <= 0;   
-  if ((registerOut == 1) & isALU)     
+  if ((actualRegisterOut == 1) & isALU & registerWriteEnable)     
          registers[1] <= aluResult;
-  if ((registerOut == 2) & isALU)     
+  if ((actualRegisterOut == 2) & isALU & registerWriteEnable)
          registers[2] <= aluResult;
-  if ((registerOut == 3) & isALU)     
+  if ((actualRegisterOut == 3) & isALU & registerWriteEnable)     
          registers[3] <= aluResult;
-  if ((registerOut == 4) & isALU)     
+  if ((actualRegisterOut == 4) & isALU & registerWriteEnable)     
          registers[4] <= aluResult;
-  if ((registerOut == 5) & isALU)     
+  if ((actualRegisterOut == 5) & isALU & registerWriteEnable)     
          registers[5] <= aluResult;
-  if ((registerOut == 6) & isALU)     
+  if ((actualRegisterOut == 6) & isALU & registerWriteEnable)     
          registers[6] <= aluResult;
-  if ((registerOut == 7) & isALU)     
+  if ((actualRegisterOut == 7) & isALU & registerWriteEnable)     
          registers[7] <= aluResult;
 end   
 
-// FOR DEBUGGING THE PBL CPU   
-initial
-  $display ("pc val add type aluIn Result    we");
-
+   wire [7:0] reg1, reg2;
+   assign reg1 = registers[1];
+   assign reg2 = registers[2];
    
-initial 
+// FOR DEBUGGING THE PBL CPU
+//INITIALIZING BIT RAM   
+initial
+  begin
+  $display ("INITIALIZING BIT MEMORY");
+  $display ("ADDRESS DATA");
+  #160  $display ("pc val OpC  regO type aluIn Result Reg1 Reg2   ");
   $monitor (pc, " ",
-            instructionValue, 
-	    addressOut, "    ",
+            instructionValue, " %h",
+            longOpCode, "  ",	    
+	    actualRegisterOut, "    ",
             outType, " ",
 	    ALU.in_a, "      ",
-	    aluResult, "       ",
-	    port_c_we
+	    aluResult, "  ",
+	    reg1,"  ",
+	    reg2, "   "
             );
+     #40 $finish;
    
+  end 
 
 //THIS ONE IS FOR MY CPU, WATCHING SHIFTS AND INCREMENTS
 /*   
@@ -233,7 +276,7 @@ initial
 	     register1In, "  %h",
 	     register2In, "  %h",
 	     aluResult, " ",
-	     registerOut, "  ",
+	     actualRegisterOut, "  ",
              register1Value, "  ",
              register2Value, "  ",	   
              register1Value, " ",
@@ -252,7 +295,7 @@ initial
              opCode, "   %h", 
 	     register1In, " %h",
 	     register2In, " %h",
-	     registerOut, "       ",
+	     actualRegisterOut, "       ",
 	     isALU, " " ,
 	     instructionValue, " ",
              aluResult, " ",
