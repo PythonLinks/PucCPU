@@ -237,9 +237,11 @@ always @(posedge clock) begin
          registers[7] <= aluResult;
 end   
 
-   wire [7:0] reg1, reg2;
+   wire [7:0] reg1, reg2, reg3, reg4;
    assign reg1 = registers[1];
    assign reg2 = registers[2];
+   assign reg3 = registers[3];
+   assign reg4 = registers[4];
    
 // FOR DEBUGGING THE PBL CPU
 //INITIALIZING BIT RAM   
@@ -247,7 +249,7 @@ initial
   begin
   $display ("INITIALIZING BIT MEMORY");
   $display ("ADDRESS DATA");
-  #160  $display ("pc val OpC  regO type aluIn Result Reg1 Reg2   ");
+  #160  $display ("pc val OpC  regO type aluIn Result Reg1 Reg2 Reg3 Reg4 ");
   $monitor (pc, " ",
             instructionValue, " %h",
             longOpCode, "  ",	    
@@ -256,9 +258,11 @@ initial
 	    ALU.in_a, "      ",
 	    aluResult, "  ",
 	    reg1,"  ",
-	    reg2, "   "
+	    reg2, "   ",
+	    reg3, "   ",
+	    reg4, "   "	    
             );
-     #40 $finish;
+     #50 $finish;
    
   end 
 
