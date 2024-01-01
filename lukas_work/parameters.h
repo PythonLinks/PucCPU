@@ -11,6 +11,5 @@ parameter VALUE_WIDTH = 8;
 parameter TRUE   = 1'b1;
 parameter FALSE  = 1'b0;
 
-//`include "instructions.h"
 
 

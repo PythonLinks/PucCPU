@@ -1,0 +1,1006 @@
+{
+ "builder": {
+  "_version": "<undefined>",
+  "_logger": "hdl_checker.builders.fallback",
+  "_work_folder": "/home/lukas/Documents/studia/PBL_contr_mod/.hdl_checker",
+  "_builtin_libraries": [],
+  "_added_libraries": [
+   {
+    "name": "work",
+    "case_sensitive": false,
+    "__class__": "Identifier"
+   },
+   {
+    "name": "default_library",
+    "case_sensitive": false,
+    "__class__": "Identifier"
+   }
+  ],
+  "__class__": "Fallback"
+ },
+ "config_file": [
+  {
+   "name": "/tmp/hdl_checker_project_pid67786.json",
+   "__class__": "Path"
+  },
+  1703960834.8496437,
+  "generated"
+ ],
+ "database": {
+  "sources": [
+   {
+    "path": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/pcs/pc3.sv",
+     "__class__": "Path"
+    },
+    "mtime": 1703269460.840929,
+    "flags": {
+     "source_specific": [],
+     "single": [],
+     "dependencies": []
+    },
+    "dependencies": [
+     {
+      "owner": {
+       "name": "/home/lukas/Documents/studia/PBL_contr_mod/pcs/pc3.sv",
+       "__class__": "Path"
+      },
+      "name": {
+       "name": "parameters.h",
+       "case_sensitive": true,
+       "__class__": "VerilogIdentifier"
+      },
+      "locations": [
+       [
+        10,
+        10
+       ]
+      ],
+      "__class__": "IncludedPath"
+     }
+    ],
+    "diags": []
+   },
+   {
+    "path": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/decoder.sv",
+     "__class__": "Path"
+    },
+    "mtime": 1703269460.8369288,
+    "flags": {
+     "source_specific": [],
+     "single": [],
+     "dependencies": []
+    },
+    "dependencies": [
+     {
+      "owner": {
+       "name": "/home/lukas/Documents/studia/PBL_contr_mod/decoder.sv",
+       "__class__": "Path"
+      },
+      "name": {
+       "name": "parameters.h",
+       "case_sensitive": true,
+       "__class__": "VerilogIdentifier"
+      },
+      "locations": [
+       [
+        3,
+        11
+       ]
+      ],
+      "__class__": "IncludedPath"
+     }
+    ],
+    "diags": []
+   },
+   {
+    "path": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/pcs/pc2.sv",
+     "__class__": "Path"
+    },
+    "mtime": 1703269460.840929,
+    "flags": {
+     "source_specific": [],
+     "single": [],
+     "dependencies": []
+    },
+    "dependencies": [],
+    "diags": []
+   },
+   {
+    "path": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/pcs/pc1.sv",
+     "__class__": "Path"
+    },
+    "mtime": 1703269843.5859754,
+    "flags": {
+     "source_specific": [],
+     "single": [],
+     "dependencies": []
+    },
+    "dependencies": [],
+    "diags": []
+   },
+   {
+    "path": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/lukas_work/control_module.v",
+     "__class__": "Path"
+    },
+    "mtime": 1703961532.012415,
+    "flags": {
+     "source_specific": [],
+     "single": [],
+     "dependencies": []
+    },
+    "dependencies": [
+     {
+      "owner": {
+       "name": "/home/lukas/Documents/studia/PBL_contr_mod/lukas_work/control_module.v",
+       "__class__": "Path"
+      },
+      "name": {
+       "name": "instructions.h",
+       "case_sensitive": true,
+       "__class__": "VerilogIdentifier"
+      },
+      "locations": [
+       [
+        10,
+        9
+       ]
+      ],
+      "__class__": "IncludedPath"
+     }
+    ],
+    "diags": []
+   },
+   {
+    "path": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/alu.sv",
+     "__class__": "Path"
+    },
+    "mtime": 1703269460.8369288,
+    "flags": {
+     "source_specific": [],
+     "single": [],
+     "dependencies": []
+    },
+    "dependencies": [
+     {
+      "owner": {
+       "name": "/home/lukas/Documents/studia/PBL_contr_mod/alu.sv",
+       "__class__": "Path"
+      },
+      "name": {
+       "name": "parameters.h",
+       "case_sensitive": true,
+       "__class__": "VerilogIdentifier"
+      },
+      "locations": [
+       [
+        9,
+        11
+       ]
+      ],
+      "__class__": "IncludedPath"
+     }
+    ],
+    "diags": []
+   },
+   {
+    "path": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/top.sv",
+     "__class__": "Path"
+    },
+    "mtime": 1703269460.840929,
+    "flags": {
+     "source_specific": [],
+     "single": [],
+     "dependencies": []
+    },
+    "dependencies": [
+     {
+      "owner": {
+       "name": "/home/lukas/Documents/studia/PBL_contr_mod/top.sv",
+       "__class__": "Path"
+      },
+      "name": {
+       "name": "parameters.h",
+       "case_sensitive": true,
+       "__class__": "VerilogIdentifier"
+      },
+      "locations": [
+       [
+        15,
+        8
+       ]
+      ],
+      "__class__": "IncludedPath"
+     },
+     {
+      "owner": {
+       "name": "/home/lukas/Documents/studia/PBL_contr_mod/top.sv",
+       "__class__": "Path"
+      },
+      "name": {
+       "name": "cpu.sv",
+       "case_sensitive": true,
+       "__class__": "VerilogIdentifier"
+      },
+      "locations": [
+       [
+        4,
+        8
+       ]
+      ],
+      "__class__": "IncludedPath"
+     }
+    ],
+    "diags": []
+   },
+   {
+    "path": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/cpu.sv",
+     "__class__": "Path"
+    },
+    "mtime": 1703269460.8369288,
+    "flags": {
+     "source_specific": [],
+     "single": [],
+     "dependencies": []
+    },
+    "dependencies": [
+     {
+      "owner": {
+       "name": "/home/lukas/Documents/studia/PBL_contr_mod/cpu.sv",
+       "__class__": "Path"
+      },
+      "name": {
+       "name": "parameters.h",
+       "case_sensitive": true,
+       "__class__": "VerilogIdentifier"
+      },
+      "locations": [
+       [
+        17,
+        8
+       ]
+      ],
+      "__class__": "IncludedPath"
+     },
+     {
+      "owner": {
+       "name": "/home/lukas/Documents/studia/PBL_contr_mod/cpu.sv",
+       "__class__": "Path"
+      },
+      "name": {
+       "name": "memory.sv",
+       "case_sensitive": true,
+       "__class__": "VerilogIdentifier"
+      },
+      "locations": [
+       [
+        5,
+        8
+       ]
+      ],
+      "__class__": "IncludedPath"
+     },
+     {
+      "owner": {
+       "name": "/home/lukas/Documents/studia/PBL_contr_mod/cpu.sv",
+       "__class__": "Path"
+      },
+      "name": {
+       "name": "alu.sv",
+       "case_sensitive": true,
+       "__class__": "VerilogIdentifier"
+      },
+      "locations": [
+       [
+        6,
+        8
+       ]
+      ],
+      "__class__": "IncludedPath"
+     },
+     {
+      "owner": {
+       "name": "/home/lukas/Documents/studia/PBL_contr_mod/cpu.sv",
+       "__class__": "Path"
+      },
+      "name": {
+       "name": "pc.sv",
+       "case_sensitive": true,
+       "__class__": "VerilogIdentifier"
+      },
+      "locations": [
+       [
+        7,
+        8
+       ]
+      ],
+      "__class__": "IncludedPath"
+     }
+    ],
+    "diags": []
+   },
+   {
+    "path": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/interfaces/decoder.sv",
+     "__class__": "Path"
+    },
+    "mtime": 1703269460.8369288,
+    "flags": {
+     "source_specific": [],
+     "single": [],
+     "dependencies": []
+    },
+    "dependencies": [
+     {
+      "owner": {
+       "name": "/home/lukas/Documents/studia/PBL_contr_mod/interfaces/decoder.sv",
+       "__class__": "Path"
+      },
+      "name": {
+       "name": "parameters.h",
+       "case_sensitive": true,
+       "__class__": "VerilogIdentifier"
+      },
+      "locations": [
+       [
+        13,
+        10
+       ]
+      ],
+      "__class__": "IncludedPath"
+     }
+    ],
+    "diags": []
+   },
+   {
+    "path": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/pc.sv",
+     "__class__": "Path"
+    },
+    "mtime": 1703269460.8369288,
+    "flags": {
+     "source_specific": [],
+     "single": [],
+     "dependencies": []
+    },
+    "dependencies": [
+     {
+      "owner": {
+       "name": "/home/lukas/Documents/studia/PBL_contr_mod/pc.sv",
+       "__class__": "Path"
+      },
+      "name": {
+       "name": "parameters.h",
+       "case_sensitive": true,
+       "__class__": "VerilogIdentifier"
+      },
+      "locations": [
+       [
+        10,
+        10
+       ]
+      ],
+      "__class__": "IncludedPath"
+     }
+    ],
+    "diags": []
+   },
+   {
+    "path": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/tb.sv",
+     "__class__": "Path"
+    },
+    "mtime": 1703269460.840929,
+    "flags": {
+     "source_specific": [],
+     "single": [],
+     "dependencies": []
+    },
+    "dependencies": [
+     {
+      "owner": {
+       "name": "/home/lukas/Documents/studia/PBL_contr_mod/tb.sv",
+       "__class__": "Path"
+      },
+      "name": {
+       "name": "parameters.h",
+       "case_sensitive": true,
+       "__class__": "VerilogIdentifier"
+      },
+      "locations": [
+       [
+        6,
+        8
+       ]
+      ],
+      "__class__": "IncludedPath"
+     },
+     {
+      "owner": {
+       "name": "/home/lukas/Documents/studia/PBL_contr_mod/tb.sv",
+       "__class__": "Path"
+      },
+      "name": {
+       "name": "cpu.sv",
+       "case_sensitive": true,
+       "__class__": "VerilogIdentifier"
+      },
+      "locations": [
+       [
+        3,
+        8
+       ]
+      ],
+      "__class__": "IncludedPath"
+     }
+    ],
+    "diags": []
+   },
+   {
+    "path": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/interfaces/stack.sv",
+     "__class__": "Path"
+    },
+    "mtime": 1703269460.8369288,
+    "flags": {
+     "source_specific": [],
+     "single": [],
+     "dependencies": []
+    },
+    "dependencies": [
+     {
+      "owner": {
+       "name": "/home/lukas/Documents/studia/PBL_contr_mod/interfaces/stack.sv",
+       "__class__": "Path"
+      },
+      "name": {
+       "name": "parameters.h",
+       "case_sensitive": true,
+       "__class__": "VerilogIdentifier"
+      },
+      "locations": [
+       [
+        5,
+        10
+       ]
+      ],
+      "__class__": "IncludedPath"
+     }
+    ],
+    "diags": []
+   },
+   {
+    "path": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/lukas_work/decoder.v",
+     "__class__": "Path"
+    },
+    "mtime": 1703960676.70086,
+    "flags": {
+     "source_specific": [],
+     "single": [],
+     "dependencies": []
+    },
+    "dependencies": [
+     {
+      "owner": {
+       "name": "/home/lukas/Documents/studia/PBL_contr_mod/lukas_work/decoder.v",
+       "__class__": "Path"
+      },
+      "name": {
+       "name": "parameters.h",
+       "case_sensitive": true,
+       "__class__": "VerilogIdentifier"
+      },
+      "locations": [
+       [
+        1,
+        8
+       ]
+      ],
+      "__class__": "IncludedPath"
+     },
+     {
+      "owner": {
+       "name": "/home/lukas/Documents/studia/PBL_contr_mod/lukas_work/decoder.v",
+       "__class__": "Path"
+      },
+      "name": {
+       "name": "instructions.h",
+       "case_sensitive": true,
+       "__class__": "VerilogIdentifier"
+      },
+      "locations": [
+       [
+        0,
+        8
+       ]
+      ],
+      "__class__": "IncludedPath"
+     }
+    ],
+    "diags": []
+   },
+   {
+    "path": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/lukas_work/memory.sv",
+     "__class__": "Path"
+    },
+    "mtime": 1703274307.436014,
+    "flags": {
+     "source_specific": [],
+     "single": [],
+     "dependencies": []
+    },
+    "dependencies": [
+     {
+      "owner": {
+       "name": "/home/lukas/Documents/studia/PBL_contr_mod/lukas_work/memory.sv",
+       "__class__": "Path"
+      },
+      "name": {
+       "name": "parameters.h",
+       "case_sensitive": true,
+       "__class__": "VerilogIdentifier"
+      },
+      "locations": [
+       [
+        4,
+        12
+       ]
+      ],
+      "__class__": "IncludedPath"
+     }
+    ],
+    "diags": []
+   },
+   {
+    "path": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/stack.sv",
+     "__class__": "Path"
+    },
+    "mtime": 1703269460.840929,
+    "flags": {
+     "source_specific": [],
+     "single": [],
+     "dependencies": []
+    },
+    "dependencies": [],
+    "diags": []
+   },
+   {
+    "path": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/lukas_work/stack.sv",
+     "__class__": "Path"
+    },
+    "mtime": 1703274307.432014,
+    "flags": {
+     "source_specific": [],
+     "single": [],
+     "dependencies": []
+    },
+    "dependencies": [],
+    "diags": []
+   },
+   {
+    "path": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/memory.sv",
+     "__class__": "Path"
+    },
+    "mtime": 1703270485.5357301,
+    "flags": {
+     "source_specific": [],
+     "single": [],
+     "dependencies": []
+    },
+    "dependencies": [
+     {
+      "owner": {
+       "name": "/home/lukas/Documents/studia/PBL_contr_mod/memory.sv",
+       "__class__": "Path"
+      },
+      "name": {
+       "name": "parameters.h",
+       "case_sensitive": true,
+       "__class__": "VerilogIdentifier"
+      },
+      "locations": [
+       [
+        4,
+        12
+       ]
+      ],
+      "__class__": "IncludedPath"
+     }
+    ],
+    "diags": []
+   },
+   {
+    "path": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/lukas_work/pc2.sv",
+     "__class__": "Path"
+    },
+    "mtime": 1703274307.436014,
+    "flags": {
+     "source_specific": [],
+     "single": [],
+     "dependencies": []
+    },
+    "dependencies": [],
+    "diags": []
+   }
+  ],
+  "inferred_libraries": [
+   {
+    "name": "/home/lukas/Documents/studia/PBL_contr_mod/lukas_work/decoder.v",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpjg217o5g.v",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmps83bwtzo.v",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmphtxpy08m.v",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpl2ru1lb5.v",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpqlhsu1p9.v",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpe8daprpf.v",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpsijx1450.v",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpss8usb93.v",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpuxfl5dqd.v",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpxlbvf204.v",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpr3d4nd6e.v",
+    "__class__": "Path"
+   },
+   {
+    "name": "/home/lukas/Documents/studia/PBL_contr_mod/lukas_work/control_module.v",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmprt8bi5hk.v",
+    "__class__": "Path"
+   }
+  ],
+  "design_units": [
+   {
+    "owner": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/lukas_work/pc2.sv",
+     "__class__": "Path"
+    },
+    "type_": "entity",
+    "name": {
+     "name": "pc",
+     "case_sensitive": true,
+     "__class__": "VerilogIdentifier"
+    },
+    "locations": [
+     [
+      0,
+      6
+     ]
+    ],
+    "__class__": "VerilogDesignUnit"
+   },
+   {
+    "owner": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/pcs/pc3.sv",
+     "__class__": "Path"
+    },
+    "type_": "entity",
+    "name": {
+     "name": "PC",
+     "case_sensitive": true,
+     "__class__": "VerilogIdentifier"
+    },
+    "locations": [
+     [
+      4,
+      7
+     ]
+    ],
+    "__class__": "VerilogDesignUnit"
+   },
+   {
+    "owner": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/stack.sv",
+     "__class__": "Path"
+    },
+    "type_": "entity",
+    "name": {
+     "name": "stack",
+     "case_sensitive": true,
+     "__class__": "VerilogIdentifier"
+    },
+    "locations": [
+     [
+      1,
+      7
+     ]
+    ],
+    "__class__": "VerilogDesignUnit"
+   },
+   {
+    "owner": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/top.sv",
+     "__class__": "Path"
+    },
+    "type_": "entity",
+    "name": {
+     "name": "Top",
+     "case_sensitive": true,
+     "__class__": "VerilogIdentifier"
+    },
+    "locations": [
+     [
+      7,
+      7
+     ]
+    ],
+    "__class__": "VerilogDesignUnit"
+   },
+   {
+    "owner": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/lukas_work/decoder.v",
+     "__class__": "Path"
+    },
+    "type_": "entity",
+    "name": {
+     "name": "decoder",
+     "case_sensitive": true,
+     "__class__": "VerilogIdentifier"
+    },
+    "locations": [
+     [
+      2,
+      7
+     ]
+    ],
+    "__class__": "VerilogDesignUnit"
+   },
+   {
+    "owner": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/lukas_work/memory.sv",
+     "__class__": "Path"
+    },
+    "type_": "entity",
+    "name": {
+     "name": "MEMORY",
+     "case_sensitive": true,
+     "__class__": "VerilogIdentifier"
+    },
+    "locations": [
+     [
+      3,
+      7
+     ]
+    ],
+    "__class__": "VerilogDesignUnit"
+   },
+   {
+    "owner": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/memory.sv",
+     "__class__": "Path"
+    },
+    "type_": "entity",
+    "name": {
+     "name": "MEMORY",
+     "case_sensitive": true,
+     "__class__": "VerilogIdentifier"
+    },
+    "locations": [
+     [
+      3,
+      7
+     ]
+    ],
+    "__class__": "VerilogDesignUnit"
+   },
+   {
+    "owner": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/decoder.sv",
+     "__class__": "Path"
+    },
+    "type_": "entity",
+    "name": {
+     "name": "DECODER",
+     "case_sensitive": true,
+     "__class__": "VerilogIdentifier"
+    },
+    "locations": [
+     [
+      2,
+      7
+     ]
+    ],
+    "__class__": "VerilogDesignUnit"
+   },
+   {
+    "owner": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/pc.sv",
+     "__class__": "Path"
+    },
+    "type_": "entity",
+    "name": {
+     "name": "PC",
+     "case_sensitive": true,
+     "__class__": "VerilogIdentifier"
+    },
+    "locations": [
+     [
+      4,
+      7
+     ]
+    ],
+    "__class__": "VerilogDesignUnit"
+   },
+   {
+    "owner": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/tb.sv",
+     "__class__": "Path"
+    },
+    "type_": "entity",
+    "name": {
+     "name": "top",
+     "case_sensitive": true,
+     "__class__": "VerilogIdentifier"
+    },
+    "locations": [
+     [
+      5,
+      7
+     ]
+    ],
+    "__class__": "VerilogDesignUnit"
+   },
+   {
+    "owner": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/lukas_work/control_module.v",
+     "__class__": "Path"
+    },
+    "type_": "entity",
+    "name": {
+     "name": "control_module",
+     "case_sensitive": true,
+     "__class__": "VerilogIdentifier"
+    },
+    "locations": [
+     [
+      0,
+      6
+     ]
+    ],
+    "__class__": "VerilogDesignUnit"
+   },
+   {
+    "owner": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/pcs/pc2.sv",
+     "__class__": "Path"
+    },
+    "type_": "entity",
+    "name": {
+     "name": "pc",
+     "case_sensitive": true,
+     "__class__": "VerilogIdentifier"
+    },
+    "locations": [
+     [
+      0,
+      6
+     ]
+    ],
+    "__class__": "VerilogDesignUnit"
+   },
+   {
+    "owner": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/lukas_work/stack.sv",
+     "__class__": "Path"
+    },
+    "type_": "entity",
+    "name": {
+     "name": "stack",
+     "case_sensitive": true,
+     "__class__": "VerilogIdentifier"
+    },
+    "locations": [
+     [
+      1,
+      7
+     ]
+    ],
+    "__class__": "VerilogDesignUnit"
+   },
+   {
+    "owner": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/cpu.sv",
+     "__class__": "Path"
+    },
+    "type_": "entity",
+    "name": {
+     "name": "CPU",
+     "case_sensitive": true,
+     "__class__": "VerilogIdentifier"
+    },
+    "locations": [
+     [
+      10,
+      7
+     ]
+    ],
+    "__class__": "VerilogDesignUnit"
+   },
+   {
+    "owner": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/alu.sv",
+     "__class__": "Path"
+    },
+    "type_": "entity",
+    "name": {
+     "name": "ALU",
+     "case_sensitive": true,
+     "__class__": "VerilogIdentifier"
+    },
+    "locations": [
+     [
+      2,
+      7
+     ]
+    ],
+    "__class__": "VerilogDesignUnit"
+   },
+   {
+    "owner": {
+     "name": "/home/lukas/Documents/studia/PBL_contr_mod/pcs/pc1.sv",
+     "__class__": "Path"
+    },
+    "type_": "entity",
+    "name": {
+     "name": "pc",
+     "case_sensitive": true,
+     "__class__": "VerilogIdentifier"
+    },
+    "locations": [
+     [
+      0,
+      7
+     ]
+    ],
+    "__class__": "VerilogDesignUnit"
+   }
+  ],
+  "__class__": "Database"
+ },
+ "__version__": "0.7.4"
+}
