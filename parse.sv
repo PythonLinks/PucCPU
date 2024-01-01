@@ -11,7 +11,7 @@ module Parser (instruction,
 		register1In,
 		register2In,
 		registerOut,
-	        registerWithAddress,
+	        registerHasAddress,
 		instructionValue);
 
 `include "parameters.h"
@@ -28,18 +28,18 @@ module Parser (instruction,
    output wire        [2:0]		       register1In;
    output wire        [2:0]		       register2In;
    output wire        [2:0]		       registerOut;
-   output wire        [2:0]		       registerWithAddress;      
+   output wire        [2:0]		       registerHasAddress;      
 
    output wire [VALUE_WIDTH - 1 :0]   instructionValue;
 
    //NOW BEGIN THE ASSIGNMENTS
-   assign registerWithAddress = instruction [INSTRUCTION_WIDTH-1:
-                                          INSTRUCTION_WIDTH - 3];
-   
-   //DEALS WITH 5 OR 6 BIT OPCODES
-   assign opCode       = instruction [INSTRUCTION_WIDTH  +  
-                                     OPCODE_WIDTH - 9:
-                                     INSTRUCTION_WIDTH -8];
+   assign registerHasAddress = { instruction [INSTRUCTION_WIDTH-1],
+			         instruction [INSTRUCTION_WIDTH-2],
+			         instruction [6]
+				 };
+      
+   assign opCode  = instruction [INSTRUCTION_WIDTH - 3:
+                                       INSTRUCTION_WIDTH -8];
   
    assign address1In = instruction[INSTRUCTION_WIDTH-9:
                                           INSTRUCTION_WIDTH -16];
