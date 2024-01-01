@@ -58,15 +58,16 @@ always @(posedge clock)
 always @ (posedge clock) 
    case (resetCode)
      RET:         pc <= returnStack[stackOffset - 1'b1];
-     CALL:         pc <= instructionValue[PC_WIDTH-1:0];
+     CALL:        pc <= instructionValue;
+     JUMP:        pc <= instructionValue;
      IF0JUMP:    if (registerValue == 0) 
-                      pc <= instructionValue;
-                   else
-                      pc <= pcPlusOne;  
+                     pc <= instructionValue;
+                 else
+                     pc <= pcPlusOne;  
      IF1JUMP:    if (registerValue != 0) 
-                      pc <= instructionValue;
-                      else
-                      pc <= pcPlusOne;       
+                     pc <= instructionValue;
+                 else
+                     pc <= pcPlusOne;       
      RESET  :    pc <= 4'd0;
      default:    pc <= pcPlusOne;  
    endcase

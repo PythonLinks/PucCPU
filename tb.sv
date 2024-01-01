@@ -31,14 +31,11 @@ initial begin
     switch = ~switch;
    
     #350;
-    isReset = 1'b1;
-    #20 isReset = 1'b0;   
+    //isReset = 1'b1;
+    //#20 isReset = 1'b0;   
     
     //switch = ~switch;
-   #1200;
-   
-    $finish;
-    $display("End of simulation");
+   #10000 $finish;
  
 end
 
