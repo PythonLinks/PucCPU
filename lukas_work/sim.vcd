@@ -1,0 +1,302 @@
+$date
+	Wed Jan  3 20:28:08 2024
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module crtl_mod_tb2 $end
+$var wire 2 ! source2_choice [1:0] $end
+$var wire 8 " source2 [7:0] $end
+$var wire 2 # source1_choice [1:0] $end
+$var wire 8 $ source1 [7:0] $end
+$var wire 1 % push $end
+$var wire 1 & pop $end
+$var wire 6 ' op_code [5:0] $end
+$var wire 2 ( destination_choice [1:0] $end
+$var wire 8 ) destination [7:0] $end
+$var reg 1 * clk $end
+$var reg 1 + rst $end
+$var reg 1 , zero_flag $end
+$scope module constrol_module $end
+$var wire 1 * clk $end
+$var wire 1 + rst $end
+$var wire 1 , zero_flag $end
+$var wire 2 - source2_choice [1:0] $end
+$var wire 8 . source2 [7:0] $end
+$var wire 2 / source1_choice [1:0] $end
+$var wire 8 0 source1 [7:0] $end
+$var wire 5 1 ret_addr [4:0] $end
+$var wire 1 2 ret $end
+$var wire 1 % push $end
+$var wire 1 & pop $end
+$var wire 6 3 op_code [5:0] $end
+$var wire 5 4 jmp_addr [4:0] $end
+$var wire 1 5 jmp $end
+$var wire 40 6 instruction [39:0] $end
+$var wire 5 7 instr_addr [4:0] $end
+$var wire 2 8 destination_choice [1:0] $end
+$var wire 8 9 destination [7:0] $end
+$var wire 1 : cal $end
+$scope module decoder $end
+$var wire 1 , zero_flag $end
+$var wire 2 ; source2_choice [1:0] $end
+$var wire 8 < source2 [7:0] $end
+$var wire 2 = source1_choice [1:0] $end
+$var wire 8 > source1 [7:0] $end
+$var wire 6 ? op_code [5:0] $end
+$var wire 5 @ jmp_addr [4:0] $end
+$var wire 40 A instr [39:0] $end
+$var wire 2 B destination_choice [1:0] $end
+$var wire 8 C destination [7:0] $end
+$var reg 1 : cal $end
+$var reg 1 5 jmp $end
+$var reg 1 & pop $end
+$var reg 1 % push $end
+$var reg 1 2 ret $end
+$upscope $end
+$scope module linked_reg $end
+$var wire 1 : cal $end
+$var wire 1 * clk $end
+$var wire 1 2 ret $end
+$var wire 5 D instr_addr [4:0] $end
+$var reg 5 E ret_addr [4:0] $end
+$upscope $end
+$scope module memory $end
+$var wire 40 F instruction [39:0] $end
+$var wire 5 G pc [4:0] $end
+$upscope $end
+$scope module pc $end
+$var wire 1 * clk $end
+$var wire 1 5 jmp $end
+$var wire 5 H jmp_addr [4:0] $end
+$var wire 1 2 ret $end
+$var wire 5 I ret_addr [4:0] $end
+$var wire 1 + rst $end
+$var reg 5 J instr_addr [4:0] $end
+$upscope $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+b0 J
+bx I
+b1 H
+b0 G
+b1001000000001000000000000000000010101 F
+bx E
+b0 D
+b0 C
+b1 B
+b1001000000001000000000000000000010101 A
+b1 @
+b10010 ?
+b1 >
+b1 =
+b0 <
+b1 ;
+0:
+b0 9
+b1 8
+b0 7
+b1001000000001000000000000000000010101 6
+05
+b1 4
+b10010 3
+02
+bx 1
+b1 0
+b1 /
+b0 .
+b1 -
+0,
+1+
+1*
+b0 )
+b1 (
+b10010 '
+0&
+0%
+b1 $
+b1 #
+b0 "
+b1 !
+$end
+#5
+0*
+#10
+15
+b11 4
+b11 @
+b11 H
+b11 $
+b11 0
+b11 >
+b10011 '
+b10011 3
+b10011 ?
+b1001100000011000000000000000000010101 6
+b1001100000011000000000000000000010101 A
+b1001100000011000000000000000000010101 F
+b1 7
+b1 D
+b1 G
+b1 J
+1*
+1,
+0+
+#15
+0*
+#20
+b101 4
+b101 @
+b101 H
+b10 !
+b10 -
+b10 ;
+b10 #
+b10 /
+b10 =
+b101 $
+b101 0
+b101 >
+b10100 '
+b10100 3
+b10100 ?
+b1010000000101000000000000000000101001 6
+b1010000000101000000000000000000101001 A
+b1010000000101000000000000000000101001 F
+b11 7
+b11 D
+b11 G
+b11 J
+1*
+0,
+#25
+0*
+#30
+05
+bx 4
+bx @
+bx H
+bx (
+bx 8
+bx B
+bx !
+bx -
+bx ;
+bx #
+bx /
+bx =
+bx )
+bx 9
+bx C
+bx "
+bx .
+bx <
+bx $
+bx 0
+bx >
+b0xxxxx '
+b0xxxxx 3
+b0xxxxx ?
+bx 6
+bx A
+bx F
+b101 7
+b101 D
+b101 G
+b101 J
+1*
+#35
+0*
+#40
+b110 7
+b110 D
+b110 G
+b110 J
+1*
+1,
+#45
+0*
+#50
+b111 7
+b111 D
+b111 G
+b111 J
+1*
+#55
+0*
+#60
+b1000 7
+b1000 D
+b1000 G
+b1000 J
+1*
+#65
+0*
+#70
+b1001 7
+b1001 D
+b1001 G
+b1001 J
+1*
+#75
+0*
+#80
+b1010 7
+b1010 D
+b1010 G
+b1010 J
+1*
+#85
+0*
+#90
+b1011 7
+b1011 D
+b1011 G
+b1011 J
+1*
+#95
+0*
+#100
+b1100 7
+b1100 D
+b1100 G
+b1100 J
+1*
+#105
+0*
+#110
+b1101 7
+b1101 D
+b1101 G
+b1101 J
+1*
+#115
+0*
+#120
+b1110 7
+b1110 D
+b1110 G
+b1110 J
+1*
+#125
+0*
+#130
+b1111 7
+b1111 D
+b1111 G
+b1111 J
+1*
+#135
+0*
+#140
+b10000 7
+b10000 D
+b10000 G
+b10000 J
+1*

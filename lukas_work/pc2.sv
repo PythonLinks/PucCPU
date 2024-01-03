@@ -2,31 +2,31 @@ module pc#(
     parameter INSTR_ADDR_SIZE = 5
 ) (
     //inputs
-    CLK,
-    RST, 
-    JMP, // JMP == 1'b1 set counter to value specyfied in JMP_ADDR 
-    RET, // specyfies if we use return address and sets values of INSTR_ADDR to RET_ADDR
-    JMP_ADDR, //
-    RET_ADDR,
+    clk,
+    rst, 
+    jmp, // jmp == 1'b1 set counter to value specyfied in jmp_addr 
+    ret, // specyfies if we use return address and sets values of instr_addr to ret_addr
+    jmp_addr, //
+    ret_addr,
    
-    INSTR_ADDR // current instruction address (which instruction is currently used by ALU)
+    instr_addr // current instruction address (which instruction is currently used by alu)
 );
-    input CLK, RST, JMP, RET;
-    input [INSTR_ADDR_SIZE - 1:0] JMP_ADDR, RET_ADDR;
-    output reg [INSTR_ADDR_SIZE - 1:0] INSTR_ADDR;
+    input clk, rst, jmp, ret;
+    input [INSTR_ADDR_SIZE - 1:0] jmp_addr, ret_addr;
+    output reg [INSTR_ADDR_SIZE - 1:0] instr_addr;
 
-    always @(posedge CLK)begin 
-        if (RST) begin 
-            INSTR_ADDR <= {INSTR_ADDR_SIZE{1'b0}}; 
+    always @(posedge clk)begin 
+        if (rst) begin 
+            instr_addr <= {INSTR_ADDR_SIZE{1'b0}}; 
         end
-        else if (JMP) begin 
-            INSTR_ADDR <= JMP_ADDR;
+        else if (jmp) begin 
+            instr_addr <= jmp_addr;
         end
-        else if (RET) begin 
-            INSTR_ADDR <= RET_ADDR;
+        else if (ret) begin 
+            instr_addr <= ret_addr;
         end
         else begin 
-            INSTR_ADDR <= INSTR_ADDR + 1;
+            instr_addr <= instr_addr + 1;
         end
     end 
 endmodule

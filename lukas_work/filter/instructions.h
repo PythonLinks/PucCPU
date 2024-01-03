@@ -1,3 +1,4 @@
+
 enum bit [OPCODE_WIDTH-1:0] {
   AND  = 0, 
   ANDN = 1, 

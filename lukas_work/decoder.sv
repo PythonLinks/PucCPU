@@ -1,6 +1,13 @@
-`include "instructions.h"
-`include "parameters.h"
-module decoder(
+module decoder#(
+	parameter PC_WIDTH = 5,
+	parameter INSTR_ADDR_SIZE = 5,
+	parameter OPCODE_WIDTH = 5,
+	parameter VALUE_WIDTH = 8,
+	parameter INSTRUCTION_WIDTH = 40
+)
+(
+//	`include"instructions.h"
+//	`include"parameters.h"
 	//inputs
 	instr, zero_flag,//instruction code from hex file
 	//outputs
@@ -37,32 +44,32 @@ module decoder(
 	assign destination_choice = instr[1:0]; 
 	assign jmp_addr = source1[PC_WIDTH - 1:0]; 
 	
-	always @(op_code)begin 
-		if (op_code == `JMP)begin 
+	always @(instr)begin 
+		if (op_code == JMP)begin 
 			{push, pop, jmp, cal, ret} <= 5'b00100;
 		end
-		else if (op_code == `JMP0 & zero_flag == 1'b0)begin 
+		else if (op_code == IF0JUMP & zero_flag == 1'b0)begin 
 			{push, pop, jmp, cal, ret} <= 5'b00100;
 		end
-		else if (op_code == `JMP1 & zero_flag == 1'b1)begin 
+		else if (op_code == IF1JUMP & zero_flag == 1'b1)begin 
 			{push, pop, jmp, cal, ret} <= 5'b00100;
 		end
-		else if(op_code == `CAL)begin 
+		else if(op_code == CALL)begin 
 			{push, pop, jmp, cal, ret} <= 5'b10110;
 		end
-		else if (op_code == `CAL0 & zero_flag == 1'b0)begin 
+		else if (op_code == CAL0 & zero_flag == 1'b0)begin 
 			{push, pop, jmp, cal, ret} <= 5'b10110;
 		end
-		else if (op_code == `CAL1 & zero_flag == 1'b1)begin 
+		else if (op_code == CAL1 & zero_flag == 1'b1)begin 
 			{push, pop, jmp, cal, ret} <= 5'b10110;
 		end
-		else if(op_code == `RET)begin 
+		else if(op_code == RET)begin 
 			{push, pop, jmp, cal, ret} <= 5'b01001;
 		end
-		else if (op_code == `RET0 & zero_flag == 1'b0)begin 
+		else if (op_code == RET0 & zero_flag == 1'b0)begin 
 			{push, pop, jmp, cal, ret} <= 5'b01001;
 		end
-		else if (op_code == `RET1 & zero_flag == 1'b1)begin 
+		else if (op_code == RET1 & zero_flag == 1'b1)begin 
 			{push, pop, jmp, cal, ret} <= 5'b01001;
 		end
 		else begin
