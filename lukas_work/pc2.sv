@@ -23,7 +23,7 @@ module pc#(
             instr_addr <= jmp_addr;
         end
         else if (ret) begin 
-            instr_addr <= ret_addr;
+            instr_addr <= ret_addr + 1;
         end
         else begin 
             instr_addr <= instr_addr + 1;

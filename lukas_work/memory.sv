@@ -9,7 +9,7 @@ module MEMORY (pc, instruction);
     `ifdef PBL   
        reg [INSTRUCTION_WIDTH - 1: 0] memory [0:255];
     `else
-      reg [INSTRUCTION_WIDTH - 1: 0] memory [0:11];       
+      reg [INSTRUCTION_WIDTH - 1: 0] memory [0:255];       
     `endif
    
     assign instruction = memory [pc];
@@ -19,6 +19,6 @@ initial
     `ifdef PBL
       $readmemh("pbl.hex", memory);
     `else
-      $readmemh("hex.hex", memory);
+      $readmemh("hex.hex", memory, 0, 29);
    `endif
 endmodule  

@@ -28,13 +28,16 @@ module crtl_mod_tb2;
 	initial begin
 		clk = 1;
 		rst = 1;
-		zero_flag = 0;
+		zero_flag = 1;
 		#10
 		rst = 0;
-		zero_flag = 1;
-		#10 
+		#30 
 		zero_flag = 0;
-		#20
+		#40
+		zero_flag = 1;
+		#70
+		zero_flag = 0;
+		#50
 		zero_flag = 1;
 		#100
 		$finish;
