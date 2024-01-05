@@ -1,4 +1,4 @@
-//`define HISSTACK
+//`define HISSTACK 1
 
 `ifdef HISSTACK
 module HisStack (clock, call, return, reset, called_from, return_to);
