@@ -1,5 +1,6 @@
 `default_nettype none
 
+`include "stack.sv"
 //ResetCode is the instructoin opcode, or the reset code if
 //  reset is pushed.
 module PC (clock,
@@ -22,42 +23,26 @@ module PC (clock,
   reg  [PC_WIDTH-1:0]	       returnStack[16];
   reg  [3:0]		       stackOffset;
   reg  [3:0]	               previousStackOffset;  
-  wire [PC_WIDTH - 1 : 0]     returnV;
+  wire  [PC_WIDTH-1:0]             return_to;   
 
-//Update the stacks
-always @ (posedge clock) 
-  case (resetCode)
-    RET:   stackOffset <= stackOffset - 1'b1;
-    CALL:   stackOffset <= stackOffset + 1'b1;
-    RESET:  stackOffset <= 0;
-    default: stackOffset <= stackOffset; 
-  endcase          
 
 initial
   begin
-  stackOffset = 0;
   pc = 0;
   end
-//We do not want a negative stack offset   
-assign previousStackOffset = stackOffset ? (stackOffset -1) : 0;
-
-//On a return we go to the previous stack offset not this one.     
-assign returnV =   returnStack [previousStackOffset];
-   
-//No need to update the return stack on a return, as the value
-//gets overwritten in the future.           
-always @(posedge clock)
-  if (resetCode == CALL)
-    returnStack [stackOffset] <= pc + 1;
-//  else  //Not really needed
-//    returnStack [stackOffset] <= returnStack [stackOffset] ;
    
  assign pcPlusOne    = pc + 1;  
-   
+
+MyStack stack (.clock(clock),
+               .reset_code(resetCode), 
+               .called_from(pc),
+	       .return_to (return_to)
+                );
+    
 //Update the program counter   
 always @ (posedge clock) 
    case (resetCode)
-     RET:         pc <= returnStack[stackOffset - 1'b1];
+     RET:         pc <= return_to;
      CALL:        pc <= instructionValue;
      JUMP:        pc <= instructionValue;
      IF0JUMP:    if (registerValue == 0) 
