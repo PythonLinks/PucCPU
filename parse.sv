@@ -53,10 +53,8 @@ module Parser (instruction,
                                           INSTRUCTION_WIDTH - 24];
 
    assign address1Type = instruction[5:4];
-   
-     assign address2Type = instruction[3:2];
-   
-     assign outType = instruction[1:0];
+   assign address2Type = instruction[3:2];
+   assign outType = instruction[1:0];
 			 
    
    assign register1In = address1In[2:0];

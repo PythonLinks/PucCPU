@@ -16,7 +16,7 @@
     } opCodes;
    
     input CLK;
-   input [1:0] jump_code;
+    input [1:0] jump_code;
     input [INSTR_ADDR_SIZE - 1:0] jump_address, return_address;
     output reg [INSTR_ADDR_SIZE - 1:0] instruction_address;
 

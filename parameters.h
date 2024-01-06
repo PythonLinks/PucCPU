@@ -18,7 +18,7 @@ parameter useImmediate = 2'b11;
 
 
 
-`include "instructions.h"
+//`include "instructions.h"
 
 `ifndef PBL
  `define PBL 8

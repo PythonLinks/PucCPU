@@ -2,7 +2,7 @@
 
 
 module MEMORY (pc, instruction);
-   `include "parameters.h"
+    `include "parameters.h"
     input [PC_WIDTH-1 : 0] pc;
     output reg [INSTRUCTION_WIDTH-1 : 0] instruction;
     `ifdef PBL   
@@ -21,7 +21,3 @@ initial
       $readmemh("asm.hex", memory, 0, 11);
    `endif
 endmodule  
-
-
-
- 
