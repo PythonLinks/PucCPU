@@ -1,6 +1,5 @@
 `default_nettype none
 
-
 `define IVERILOG
 
 `ifdef IVERILOG
@@ -166,14 +165,15 @@ end
    assign reg4 = registers[4];
    assign reg5 = registers[5];   
 
-`ifdef PBLSCRIPT
-//`include "monitor/pblDemo.sv"   
-`endif
-		
+`ifdef PBL
+`include "monitor/pblDemo.sv"   
+`else
+
 `include "monitor/debugMyCPU.sv"
 //`include "monitor/watchRegs125.sv"   
  
 //`include "monitor/testRegisters.sv"
+`endif
    
 endmodule      
 

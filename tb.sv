@@ -34,7 +34,7 @@ initial begin
     switch = ~switch;
     `endif
    `ifdef PBL
-   #10000 $finish;
+   #100000 $finish;
    `else
    #10000 $finish;
    `endif   
