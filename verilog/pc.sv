@@ -1,6 +1,7 @@
+`timescale 1ns/1ps
 `default_nettype none
+`include "verilog/stack.sv"
 
-`include "stack.sv"
 //ResetCode is the instructoin opcode, or the reset code if
 //  reset is pushed.
 module PC (clock,

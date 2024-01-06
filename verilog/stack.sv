@@ -1,5 +1,5 @@
 //`define HISSTACK 1
-
+`timescale 1ns/1ps
 `ifdef HISSTACK
 module HisStack (clock, call, return, reset, called_from, return_to);
    `include "parameters.h" 

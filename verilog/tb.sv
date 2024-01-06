@@ -1,9 +1,8 @@
-`default_nettype none
-
 `timescale 1ns/1ps
-`include "cpu.sv"
+`default_nettype none
+`include "verilog/cpu.sv"
 
-module top();
+module tb();
 `include "parameters.h"
 reg clock;
 reg isReset;

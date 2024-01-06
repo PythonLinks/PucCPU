@@ -1,11 +1,11 @@
+`timescale 1ns/1ps
 `default_nettype none
-
 `define IVERILOG
 
 `ifdef IVERILOG
-`include "memory.sv"
-`include "pc.sv"
-`include "parse.sv"
+`include "verilog/memory.sv"
+`include "verilog/pc.sv"
+`include "verilog/parse.sv"
 
 
 `ifdef PBL
@@ -14,7 +14,7 @@
 `include "../Modules/alu.v"
 `include "../Modules/flag_reg.v"
 `else
-  `include "alu.sv"
+  `include "verilog/alu.sv"
 `endif
 `endif
 
@@ -111,7 +111,7 @@ module CPU(clock,
 wire  registerWriteEnable;
 
 `ifdef PBL
-`include "orszuk.v"
+`include "verilog/orszuk.v"
 `else	       
    ALU alu (
             .opCode (opCode), 
