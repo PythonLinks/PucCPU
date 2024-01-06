@@ -9,10 +9,10 @@
 
 
 `ifdef PBL
-`include "../PBLcpu/Modules/ram_bit.v"
-`include "../PBLcpu/Modules/ram_word.v"
-`include "../PBLcpu/Modules/alu.v"
-`include "../PBLcpu/Modules/flag_reg.v"
+`include "../Modules/ram_bit.v"
+`include "../Modules/ram_word.v"
+`include "../Modules/alu.v"
+`include "../Modules/flag_reg.v"
 `else
   `include "alu.sv"
 `endif
