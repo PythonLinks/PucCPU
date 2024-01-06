@@ -13,7 +13,7 @@ module MyStack(clock, reset_code, called_from, return_to);
   `endif // !`ifdef HISSTACK
    input		      clock;
    input [PC_WIDTH-1:0] called_from;
-   input [PC_WIDTH-1:0] return_to;   
+   output reg [PC_WIDTH-1:0] return_to;   
    reg  [PC_WIDTH-1:0]	       returnStack[16];
    reg  [3:0]		       stackOffset;
    reg  [3:0]	               previousStackOffset;  
@@ -26,9 +26,10 @@ assign return_to =   returnStack [previousStackOffset];
 `ifdef HISSTACK 
 //BIT INSTRUCTION VERSION  
 always @(posedge clock)
-  if (call)
+  if (reset_code == CALL)begin
     returnStack [stackOffset] <= called_from + 1;
-
+  end
+   
 always @ (posedge clock)    
   case ({call,return,reset})
     3b'100:   stackOffset <= stackOffset - 1'b1;

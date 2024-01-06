@@ -27,16 +27,18 @@ initial begin
     #300;
     switch = ~switch;
 
-    #300;
-    switch = ~switch;
-   
     #350;
+    `ifndef PBL
     //isReset = 1'b1;
     //#20 isReset = 1'b0;   
-    
-    //switch = ~switch;
+    switch = ~switch;
+    `endif
+   `ifdef PBL
    #10000 $finish;
- 
+   `else
+   #10000 $finish;
+   `endif   
+   
 end
 
      

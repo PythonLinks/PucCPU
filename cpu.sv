@@ -75,11 +75,11 @@ module CPU(clock,
 
  assign realAddress2In = (registerHasAddress[1]) ? 
                              registers[2]:
-                             address2In ;
+                             address2In;
 
  assign realAddressOut = (registerHasAddress[0]) ? 
                              registers[3]:
-                             addressOut ;   
+                             addressOut;   
    
 
  
@@ -96,114 +96,23 @@ module CPU(clock,
 		registerOut,
 		registerHasAddress,
 		instructionValue);
-   
-   
+      
    assign register1Value = registers[register1In];
    assign register2Value = registers[register2In];   
    
    PC pcModule (.clock(clock),
 		.resetCode (resetCode),
 		.instructionValue(instructionValue),
-		.registerValue(register2Value),
+		.registerValue(register1Value),
 		.pc (pc));
-   
    
    MEMORY memory ( .pc(pc),
 		   .instruction (instruction));
 
+wire  registerWriteEnable;
 
 `ifdef PBL
-wire  wordWriteEnable;
-wire  registerWriteEnable;
-wire  bitWriteEnable;
-
-assign bitWriteEnable    = (  outType == useBit) ? TRUE: FALSE;
-assign wordWriteEnable   = (  outType == useMemory) ? TRUE: FALSE;
-assign registerWriteEnable = (  outType == useRegister) ? TRUE: FALSE;   
-   
-
-wire [MEMORY_WIDTH-1:0] wordA;
-wire [MEMORY_WIDTH-1:0] wordB;
-   
-// Here we have the word memory
-ram_word wordMemory (
-    .clk(clock),
-    .port_a_address(realAddress1In),
-    .port_a_out(wordA),
-    .port_b_address(realAddress2In),
-    .port_b_out(wordB),
-    .port_c_address(realAddressOut),
-    .port_c_data(aluResult),
-    .port_c_we(wordWriteEnable)
-);
-
-   
-// Here we define the bit memory
-
-wire bitA;
-wire bitB;
-wire port_c_data;
-
-   
-ram_bit bitMemory(
-    .clk(clock),
-
-    .port_a_address(realAddress1In),
-    .port_a_out(bitA),
-
-    .port_b_address(realAddress2In),
-    .port_b_out(bitB),
-
-    .port_c_address(realAddressOut),
-    .port_c_data(aluResult[0]),
-    .port_c_we(bitWriteEnable)
-);
-
-
-// And here we define the flags   
-wire oldCarryFlag;
-wire oldZFlag;
-wire oldBorrowFlag;
-wire newCarryFlag;
-wire newBorrowFlag; 
-wire newZFlag;
-	       
-flag_reg flags(
-    .clk(clock),
-    .flag_rst(isReset),
-    .flag_c_in(newCarryFlag),
-    .flag_z_in(newZFlag),
-    .flag_b_in(newBorrowFlag),
-    .flag_c(oldCarryFlag),
-    .flag_z(oldZFlag),
-    .flag_b(oldBorrowFlag)
-);
-
-
-//And now the alu.    
-   wire [7:0] longOpCode;
-   assign longOpCode = {2'b00,opCode};
-   
-alu ALU 
-   (
-    .op_code(longOpCode),
-    .source1_choice(address1Type),
-    .bit_mem_a(bitA),
-    .word_mem_a(wordA),
-    .rf_a(register1Value),
-    .imm_a(instructionValue),
-    .source2_choice(address2Type),
-    .bit_mem_b(bitB),
-    .word_mem_b(wordB),
-    .rf_b(register2Value),
-    .imm_b(instructionValue),
-    .alu_c_in(oldCarryFlag),
-    .alu_b_in(oldBorrowFlag),
-    .alu_c_out(newCarryFlag),
-    .alu_b_out(newBorrowFlag),
-    .alu_out(aluResult)
-);
-
+`include "orszuk.v"
 `else	       
    ALU alu (
             .opCode (opCode), 
@@ -212,7 +121,8 @@ alu ALU
 	    .instructionValue (instructionValue),
 	    .switch (switch),
             .aluResult(aluResult));
-
+assign registerWriteEnable = TRUE;
+      
 `endif // !`ifdef PBL
 	       
 reg					 isALU;
@@ -256,88 +166,14 @@ end
    assign reg4 = registers[4];
    assign reg5 = registers[5];   
 
-     
-// FOR DEBUGGING THE PBL CPU
-//INITIALIZING BIT RAM   
-initial
-  begin
-  $display ("INITIALIZING BIT MEMORY");
-  $display ("ADDRESS DATA");
-  #160
-  $display ("INITIALIZING WORD MEMORY");
-  $display ("ADDRESS DATA");
-  #160   
-    //$display ("pc val OpC Reg1 Reg2 Reg5"); //bitA wordB ALU isALU typeO, registerOut");
-     $display ("BitA  WordB Product");
-     
-
-  #659 $finish;
-   
-  end // initial begin
-  always @(posedge clock)
-  if (pc == 19)
-     $display(bitA,"     ",
-              wordB, "  ",
-              reg5);
-   
-/* 
-  $display (pc, " ",
-            //instructionValue, " %h",
-            longOpCode, "  ",	    
-	    reg1,"  ",
-	    reg2, " ",
-	    reg5, "    "
-	    //bitA, " ",
-	    //wordB, "      ",	    
-	    //aluResult, "  ",
-            //isALU, "       ",
-	    //outType, " ",
-            //write5,  " ",
-            //registerOut	    
-            );   
-*/
-
-//THIS ONE IS FOR MY CPU, WATCHING SHIFTS AND INCREMENTS
-/*   
-initial 
-  $display ("SW OP  PC Val R1 R2 RO Val1 Val2 ALU RG1 RG2 SOFFSET isALU  ");
-   
-initial  
-  $monitor(
-             switch, " %h",
-             opCode, "   ", 
-             pc,"  %h",
-             instructionValue, " %h",
-	     register1In, "  %h",
-	     register2In, "  %h",
-	     aluResult, " ",
-	     registerOut, "  ",
-             register1Value, "  ",
-             register2Value, "  ",	   
-             register1Value, " ",
-	     register2Value, " ",
-	     isALU
-	     
-);
-
-//THIS ONE IS FOR TESTING THE REGISTER VALUES BEING SET
-
-initial 
-  $display ("PC   OP R1 R2 RO   isALU VAL  ALU         Reg1      Reg2");
-   
-initial
-   $monitor( pc, " ", 
-             opCode, "   %h", 
-	     register1In, " %h",
-	     register2In, " %h",
-	     registerOut, "       ",
-	     isALU, " " ,
-	     instructionValue, " ",
-             aluResult, " ",
-	     reg1, " ",
-	     reg2
-             );
-*/
+`ifdef PBLSCRIPT
+//`include "monitor/pblDemo.sv"   
+`endif
+		
+`include "monitor/debugMyCPU.sv"
+//`include "monitor/watchRegs125.sv"   
+ 
+//`include "monitor/testRegisters.sv"
    
 endmodule      
 

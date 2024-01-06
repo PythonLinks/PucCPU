@@ -15,10 +15,10 @@ module MEMORY (pc, instruction);
 
    
 initial
-    `ifdef PBL
+    `ifdef PBLSCRIPT
       $readmemh("pbl.hex", memory);
     `else
-      $readmemh("asm.hex", memory);
+      $readmemh("asm.hex", memory, 0, 11);
    `endif
 endmodule  
 

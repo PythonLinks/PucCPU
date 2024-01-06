@@ -40,7 +40,7 @@ MyStack stack (.clock(clock),
                 );
     
 //Update the program counter   
-always @ (posedge clock) 
+always @ (posedge clock)
    case (resetCode)
      RET:         pc <= return_to;
      CALL:        pc <= instructionValue;
@@ -49,12 +49,13 @@ always @ (posedge clock)
                      pc <= instructionValue;
                  else
                      pc <= pcPlusOne;  
-     IF1JUMP:    if (registerValue != 0) 
+     IF1JUMP:    
+                 if (registerValue != 0) 
                      pc <= instructionValue;
                  else
-                     pc <= pcPlusOne;       
+                     pc <= pcPlusOne;
      RESET  :    pc <= 4'd0;
      default:    pc <= pcPlusOne;  
-   endcase
+   endcase // case (resetCode)
 
 endmodule   

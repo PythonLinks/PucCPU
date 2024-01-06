@@ -20,9 +20,9 @@ enum bit [OPCODE_WIDTH-1:0] {
   JUMP  = 18, 
   IF0JUMP = 19,     //h13
   IF1JUMP = 20,     //h14
-    CALL  = 34, //WAS 21     //h15
+  CALL  = 21, //WAS 21     //h15
   CAL0 = 22, 
-  CAL1 = 23, 
+  CAL1 = 23,       //h17
   RET  = 24,       //h18
   RET0 = 25, 
   RET1 = 26,
