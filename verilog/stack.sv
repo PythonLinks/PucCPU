@@ -1,14 +1,17 @@
 //`define HISSTACK 1
-`timescale 1ns/1ps
+`timescale 1ns/100ps
 `ifdef HISSTACK
+
 module HisStack (clock, call, return, reset, called_from, return_to);
-`include "../../PBL/Modules/parameters.sv"
+ `include "../../PBL/Modules/parameters.sv"
+`include "../../PBL/Modules/instructions.sv"   
    input call;
    input return;
    input reset;
 `else 
 module MyStack(clock, reset_code, called_from, return_to);
-`include "../../PBL/Modulesparameters.sv"
+`include "../../PBL/Modules/parameters.sv"
+`include "../../PBL/Modules/instructions.sv"   
    
    input [OPCODE_WIDTH - 1:0] reset_code;
   `endif // !`ifdef HISSTACK
@@ -45,7 +48,7 @@ always @ (posedge clock)
   case (reset_code)
     RET:   stackOffset <= stackOffset - 1'b1;
     CALL:   stackOffset <= stackOffset + 1'b1;
-    RESET:  stackOffset <= 0;
+    RST:  stackOffset <= 0;
     default: stackOffset <= stackOffset; 
   endcase          
    

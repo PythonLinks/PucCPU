@@ -1,2 +1,2 @@
-iverilog -g2009 -o out ../verilog/tb.sv ; vvp out | more ; rm out
+iverilog -g2009 -o out ../verilog/tb.sv ; vvp out ; rm out
 

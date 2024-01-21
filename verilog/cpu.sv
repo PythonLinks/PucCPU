@@ -1,24 +1,21 @@
-`timescale 1ns/1ps
+`timescale 1ns/100ps
 `default_nettype none
-`define IVERILOG
 
+`include "../../PBL/Modules/global_parameters.vh"
+
+`define IVERILOG
 `ifdef IVERILOG
 `include "../verilog/memory.sv"
 `include "../verilog/pc.sv"
 `include "../verilog/parse.sv"
 
-
-`ifdef PBL
 `include "../../PBL/Modules/ram_bit.sv"
 `include "../../PBL/Modules/ram_word.sv"
 `include "../../PBL/Modules/alu.sv"
 `include "../../PBL/Modules/flag_reg.sv"
-`else
-  `include "verilog/alu.sv"
 `endif
-`endif
+`include "../../PBL/Modules/instructions.sv"
 
-  
 module CPU(clock,
 	   isReset,
 	   switch,
@@ -26,7 +23,12 @@ module CPU(clock,
 	   register1Value,
 );
 
-`include "../../PBL/Modulesparameters.sv"
+`include "../../PBL/Modules/parameters.sv"
+
+//`ifdef DEMO
+`include "../../NEW/verilog/monitor/pblDemo.sv"   
+//`endif
+
    
    input  wire		               clock;
    input  wire		               isReset;
@@ -60,7 +62,7 @@ module CPU(clock,
   //Since we can get a reset instruction
   //Or a reset by pushbutton, we have to update the instruction.  
   wire  [OPCODE_WIDTH - 1:0] 	 resetCode;   
-  assign resetCode = isReset ? RESET : opCode; 
+  assign resetCode = isReset ? RST : opCode; 
   wire [REGISTER_WIDTH -1 : 0]	   realAddress1In;
   wire [REGISTER_WIDTH -1 : 0]	   realAddress2In;
   wire [REGISTER_WIDTH -1 : 0]	   realAddressOut;   
@@ -108,7 +110,7 @@ module CPU(clock,
 wire  registerWriteEnable;
 
 `ifdef PBL
-`include "verilog/orszuk.v"
+`include "../../NEW/verilog/orszuk.v"
 `else	       
    ALU alu (
             .opCode (opCode), 
@@ -162,15 +164,11 @@ end
    assign reg4 = registers[4];
    assign reg5 = registers[5];   
 
-`ifdef PBL
-`include "monitor/pblDemo.sv"   
-`else
 
-`include "monitor/debugMyCPU.sv"
-//`include "monitor/watchRegs125.sv"   
+//`include "../../NEW/Modules/monitor/debugMyCPU.sv"
+//`include "../../NEW/Modules/monitor/watchRegs125.sv"   
  
-//`include "monitor/testRegisters.sv"
-`endif
+//`include "../../NEW/Modules/monitor/testRegisters.sv"
    
 endmodule      
 

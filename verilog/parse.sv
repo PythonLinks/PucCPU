@@ -1,4 +1,4 @@
-`timescale 1ns/1ps
+`timescale 1ns/100ps
 `default_nettype none
 module Parser (instruction,
 		opCode,
@@ -14,7 +14,7 @@ module Parser (instruction,
 	        registerHasAddress,
 		instructionValue);
    
-`include "../../PBL/Modulesparameters.sv"
+`include "../../PBL/Modules/parameters.sv"
 
    input wire        [INSTRUCTION_WIDTH-1:0] instruction;
    output wire [OPCODE_WIDTH-1:0]             opCode;

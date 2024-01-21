@@ -1,6 +1,6 @@
-`timescale 1ns/1ps
+`timescale 1ns/100ps
 `default_nettype none
-`include "../verilog/stack.sv"
+`include "../../NEW/verilog/stack.sv"
 
 //ResetCode is the instructoin opcode, or the reset code if
 //  reset is pushed.
@@ -9,7 +9,8 @@ module PC (clock,
 	   instructionValue,
 	   registerValue,
 	   pc);
-`include "../../PBL/Modulesparameters.sv"
+   
+`include "../../PBL/Modules/parameters.sv"
 
 
   //First we have the program counter arguments, input and state.
@@ -45,7 +46,7 @@ always @ (posedge clock)
    case (resetCode)
      RET:         pc <= return_to;
      CALL:        pc <= instructionValue;
-     JUMP:        pc <= instructionValue;
+     JMP:        pc <= instructionValue;
      IF0JUMP:    if (registerValue == 0) 
                      pc <= instructionValue;
                  else
@@ -55,7 +56,7 @@ always @ (posedge clock)
                      pc <= instructionValue;
                  else
                      pc <= pcPlusOne;
-     RESET  :    pc <= 4'd0;
+     RST  :    pc <= 4'd0;
      default:    pc <= pcPlusOne;  
    endcase // case (resetCode)
 

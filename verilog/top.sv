@@ -1,6 +1,6 @@
 `default_nettype none
 
- `timescale 1ns/1ps
+ `timescale 1ns/100ps
 `ifdef IVERILOG
 `include "cpu.sv"
 `endif
@@ -13,7 +13,7 @@ module Top(clock,
            );
 
 
-`include "../../PBL/Modulesparameters.sv"
+`include "../../PBL/Modules/parameters.sv"
 
 input wire clock;
 input wire isReset;

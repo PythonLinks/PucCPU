@@ -1,5 +1,6 @@
 `default_nettype none
-`timescale 1ns/1ps
+
+`timescale 1ns/100ps
 
 module MEMORY (pc, instruction);
 `include "../../PBL/Modules/parameters.sv"

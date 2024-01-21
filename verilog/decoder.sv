@@ -1,5 +1,5 @@
 `default_nettype none
-
+`timescale 1ns/100ps
 module DECODER (clock, reset, instruction);
    `include "parameters.h"
    input  clock;
