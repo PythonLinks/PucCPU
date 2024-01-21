@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 `default_nettype none
-`include "verilog/stack.sv"
+`include "../verilog/stack.sv"
 
 //ResetCode is the instructoin opcode, or the reset code if
 //  reset is pushed.
@@ -9,8 +9,8 @@ module PC (clock,
 	   instructionValue,
 	   registerValue,
 	   pc);
-   
-  `include "parameters.h"
+`include "../../PBL/Modulesparameters.sv"
+
 
   //First we have the program counter arguments, input and state.
   input clock;

@@ -13,8 +13,9 @@ module Parser (instruction,
 		registerOut,
 	        registerHasAddress,
 		instructionValue);
+   
+`include "../../PBL/Modulesparameters.sv"
 
-`include "parameters.h"
    input wire        [INSTRUCTION_WIDTH-1:0] instruction;
    output wire [OPCODE_WIDTH-1:0]             opCode;
    output wire [7:0]			       address1In;

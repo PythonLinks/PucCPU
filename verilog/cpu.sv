@@ -3,16 +3,16 @@
 `define IVERILOG
 
 `ifdef IVERILOG
-`include "verilog/memory.sv"
-`include "verilog/pc.sv"
-`include "verilog/parse.sv"
+`include "../verilog/memory.sv"
+`include "../verilog/pc.sv"
+`include "../verilog/parse.sv"
 
 
 `ifdef PBL
-`include "../Modules/ram_bit.v"
-`include "../Modules/ram_word.v"
-`include "../Modules/alu.v"
-`include "../Modules/flag_reg.v"
+`include "../../PBL/Modules/ram_bit.sv"
+`include "../../PBL/Modules/ram_word.sv"
+`include "../../PBL/Modules/alu.sv"
+`include "../../PBL/Modules/flag_reg.sv"
 `else
   `include "verilog/alu.sv"
 `endif
@@ -26,10 +26,7 @@ module CPU(clock,
 	   register1Value,
 );
 
-`include "parameters.h"
-
-
-
+`include "../../PBL/Modulesparameters.sv"
    
    input  wire		               clock;
    input  wire		               isReset;

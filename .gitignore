@@ -41,6 +41,5 @@ memory.sv.bak
 output_files/
 parameters.h.bak
 serv_req_info.txt
-simulation/
 top.sv.bak
 .nvim/

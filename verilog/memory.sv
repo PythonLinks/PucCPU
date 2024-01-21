@@ -2,7 +2,8 @@
 `timescale 1ns/1ps
 
 module MEMORY (pc, instruction);
-    `include "parameters.h"
+`include "../../PBL/Modules/parameters.sv"
+
     input [PC_WIDTH-1 : 0] pc;
     output reg [INSTRUCTION_WIDTH-1 : 0] instruction;
     `ifdef PBL   

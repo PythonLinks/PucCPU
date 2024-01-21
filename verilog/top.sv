@@ -12,8 +12,8 @@ module Top(clock,
 			  select
            );
 
-   
-`include "parameters.h"
+
+`include "../../PBL/Modulesparameters.sv"
 
 input wire clock;
 input wire isReset;

@@ -2,13 +2,14 @@
 `timescale 1ns/1ps
 `ifdef HISSTACK
 module HisStack (clock, call, return, reset, called_from, return_to);
-   `include "parameters.h" 
+`include "../../PBL/Modules/parameters.sv"
    input call;
    input return;
    input reset;
 `else 
 module MyStack(clock, reset_code, called_from, return_to);
-   `include "parameters.h" 
+`include "../../PBL/Modulesparameters.sv"
+   
    input [OPCODE_WIDTH - 1:0] reset_code;
   `endif // !`ifdef HISSTACK
    input		      clock;
