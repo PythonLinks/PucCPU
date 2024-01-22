@@ -5,7 +5,7 @@
 
 `define IVERILOG
 `ifdef IVERILOG
-`include "../verilog/memory.sv"
+`include "../../PBL/Modules/memory.sv"
 `include "../verilog/pc.sv"
 `include "../verilog/parse.sv"
 
