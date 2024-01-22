@@ -25,9 +25,9 @@ module CPU(clock,
 
 `include "../../PBL/Modules/parameters.sv"
 
-//`ifdef DEMO
+`ifdef DEMO
 `include "../../NEW/verilog/monitor/pblDemo.sv"   
-//`endif
+`endif
 
    
    input  wire		               clock;
@@ -136,39 +136,46 @@ reg					 isALU;
                    (opCode == DECREMENT) )
                    ;
 `endif
+
+reg [7:0] registerWriteValue;   
+assign registerWriteValue = (opCode == LD)? instructionValue: aluResult;
    
 //Sadly generate does not seem to work in iVerilog
 always @(posedge clock) begin
   if (TRUE) 
          registers [0] <= 0;   
-  if ((registerOut == 1) & isALU & registerWriteEnable)     
-         registers[1] <= aluResult;
-  if ((registerOut == 2) & isALU & registerWriteEnable)
-         registers[2] <= aluResult;
-  if ((registerOut == 3) & isALU & registerWriteEnable)     
-         registers[3] <= aluResult;
-  if ((registerOut == 4) & isALU & registerWriteEnable)     
-         registers[4] <= aluResult;
-  if ((registerOut == 5) & isALU & registerWriteEnable)
-         registers[5] <= aluResult;
-  if ((registerOut == 6) & isALU & registerWriteEnable)     
-         registers[6] <= aluResult;
-  if ((registerOut == 7) & isALU & registerWriteEnable)     
-         registers[7] <= aluResult;
+  if ((registerOut == 1) & registerWriteEnable)     
+         registers[1] <= registerWriteValue;
+  if ((registerOut == 2) & registerWriteEnable)
+         registers[2] <= registerWriteValue;
+  if ((registerOut == 3) & registerWriteEnable)     
+         registers[3] <= registerWriteValue;
+  if ((registerOut == 4) & registerWriteEnable)     
+         registers[4] <= registerWriteValue;
+  if ((registerOut == 5) & registerWriteEnable)
+         registers[5] <= registerWriteValue;
+  if ((registerOut == 6) & registerWriteEnable)     
+         registers[6] <= registerWriteValue;
+  if ((registerOut == 7) & registerWriteEnable)     
+         registers[7] <= registerWriteValue;
 end   
 
-   wire [7:0] reg1, reg2, reg3, reg4, reg5;
+   wire [7:0] reg1, reg2, reg3, reg4, reg5; 
    assign reg1 = registers[1];
    assign reg2 = registers[2];
    assign reg3 = registers[3];
    assign reg4 = registers[4];
-   assign reg5 = registers[5];   
+   assign reg5 = registers[5];
 
 
-//`include "../../NEW/Modules/monitor/debugMyCPU.sv"
-//`include "../../NEW/Modules/monitor/watchRegs125.sv"   
+
+//`include "../../NEW/verilog/monitor/debugMyCPU.`
+   
+`include "../../NEW/verilog/monitor/debugNEWcpu.sv"   
+
+//`include "../../NEW/verilog/monitor/watchRegs125.sv"   
  
-//`include "../../NEW/Modules/monitor/testRegisters.sv"
+//`include "../../NEW/verilog/monitor/testRegisters.sv"
    
 endmodule      
 

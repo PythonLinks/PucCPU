@@ -1,6 +1,7 @@
 `default_nettype none
 
 `timescale 1ns/100ps
+`include "../../PBL/Modules/global_parameters.vh"
 
 module MEMORY (pc, instruction);
 `include "../../PBL/Modules/parameters.sv"
@@ -15,11 +16,11 @@ module MEMORY (pc, instruction);
    
     assign instruction = memory [pc];
 
-   
+    `define PBLSCRIPT   1
 initial
     `ifdef PBLSCRIPT
-      $readmemh("pbl.hex", memory);
+      $readmemh("../../NEW/Simulation/hex.hex", memory);
     `else
-      $readmemh("asm.hex", memory, 0, 11);
+      $readmemh("../../NEW/verilog/asm.hex", memory, 0, 11);
    `endif
 endmodule  

@@ -1,7 +1,6 @@
 `timescale 1ns/100ps
 `default_nettype none
 
-`define DEMO 1
 `define PBL 1
 
 `include "../../NEW/verilog/cpu.sv"

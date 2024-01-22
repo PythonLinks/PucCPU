@@ -8,7 +8,11 @@ assign registerWriteEnable = (  outType == useRegister) ? TRUE: FALSE;
 
 wire [MEMORY_WIDTH-1:0] wordA;
 wire [MEMORY_WIDTH-1:0] wordB;
-   
+
+
+wire [7:0] word_port_write;
+assign word_port_write = (opCode == LD)? instructionValue: aluResult;
+
 // Here we have the word memory
 ram_word wordMemory (
     .clk(clock),
@@ -17,7 +21,7 @@ ram_word wordMemory (
     .port_b_address(realAddress2In),
     .port_b_out(wordB),
     .port_c_address(realAddressOut),
-    .port_c_data(aluResult),
+    .port_c_data(word_port_write),
     .port_c_we(wordWriteEnable)
 );
 
@@ -28,6 +32,8 @@ wire bitA;
 wire bitB;
 wire port_c_data;
 
+wire bit_port_write;
+assign bit_port_write = (opCode == LD)? instructionValue: aluResult[0];
    
 ram_bit bitMemory(
     .clk(clock),
@@ -39,7 +45,7 @@ ram_bit bitMemory(
     .port_b_out(bitB),
 
     .port_c_address(realAddressOut),
-    .port_c_data(aluResult[0]),
+    .port_c_data(bit_port_write),
     .port_c_we(bitWriteEnable)
 );
 

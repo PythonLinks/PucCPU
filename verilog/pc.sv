@@ -11,6 +11,7 @@ module PC (clock,
 	   pc);
    
 `include "../../PBL/Modules/parameters.sv"
+`include "../../PBL/Modules/instructions.sv"   
 
 
   //First we have the program counter arguments, input and state.
