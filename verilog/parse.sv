@@ -35,7 +35,7 @@ module Parser (instruction,
 
    //NOW BEGIN THE ASSIGNMENTS
    assign registerHasAddress = { instruction [INSTRUCTION_WIDTH-1],
-			         instruction [INSTRUCTION_WIDTH-2],
+			         instruction [7],
 			         instruction [6]
 				 };
       

@@ -1,4 +1,3 @@
-ipython  ../../PBL/scripts/hexgenerator.py ../../PBL/scripts/opcode_list.txt ../../NEW/Simulation/demo.txt hex.hex
-cat demo.txt
-cat hex.hex
+ipython  ../../PBL/scripts/hexgenerator.py ../../PBL/scripts/opcode_list.txt ../../WPDM/Simulation/demo.txt pbl.hex
+
 

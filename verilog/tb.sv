@@ -3,7 +3,7 @@
 
 `define PBL 1
 
-`include "../../NEW/verilog/cpu.sv"
+//`include "../../WPDM/verilog/cpu.sv"
 
 
 module tb();
@@ -37,7 +37,7 @@ initial begin
     switch = ~switch;
     `endif
    `ifdef PBL
-   #100000 $finish;
+   #10000 $finish;
    `else
    #10000 $finish;
    `endif   

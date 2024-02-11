@@ -1,7 +1,7 @@
 //THIS ONE IS FOR MY CPU, WATCHING SHIFTS AND INCREMENTS
 //`ifndef PBLSCRIPT          
 initial 
-  $display ("PC opCode Val R1 R2 RO Val1 Val2 NUM  ACC ALU  ");
+  $display ("PC opCode Val R1 R2 RO Val1 Val2   R3  R4  R5  R6 ALU  ");
    
 initial  
   $monitor(" ",
@@ -14,6 +14,8 @@ initial
              register1Value, "  ",
              register2Value, "  ",	   
              reg3, " ",	   
-             reg2, " ",
+             reg4, " ",
+             reg5, " ",
+             reg6, " ",	   	   
 	     aluResult
 );

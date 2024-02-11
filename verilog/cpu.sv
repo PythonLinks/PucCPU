@@ -1,7 +1,7 @@
 `timescale 1ns/100ps
 `default_nettype none
 
-`include "../../PBL/Modules/global_parameters.vh"
+`include "../verilog/globalparameters.vh"
 
 `define IVERILOG
 `ifdef IVERILOG
@@ -26,7 +26,7 @@ module CPU(clock,
 `include "../../PBL/Modules/parameters.sv"
 
 `ifdef DEMO
-`include "../../NEW/verilog/monitor/pblDemo.sv"   
+`include "../../WPDM/verilog/monitor/pblDemo.sv"   
 `endif
 
    
@@ -66,21 +66,27 @@ module CPU(clock,
   wire [REGISTER_WIDTH -1 : 0]	   realAddress1In;
   wire [REGISTER_WIDTH -1 : 0]	   realAddress2In;
   wire [REGISTER_WIDTH -1 : 0]	   realAddressOut;   
- 
- assign realAddress1In= (registerHasAddress[2]) ? 
-                             registers[1]:
-                             address1In ;
 
- assign realAddress2In = (registerHasAddress[1]) ? 
-                             registers[2]:
-                             address2In;
+assign  realAddressOut =  
+      (opCode == LD) ? 
+      (registerHasAddress[0] ?  registers[4]: addressOut) :   	    
+      addressOut;   	    
 
- assign realAddressOut = (registerHasAddress[0]) ? 
-                             registers[3]:
-                             addressOut;   
+assign realAddress1In = 
+     (opCode == MUL) ?
+     (registerHasAddress[1] ? registers[4]: address1In):		  
+     address1In;
+
+assign realAddress2In = 
+     (opCode == MUL) ?
+     (registerHasAddress[0] ? registers[4]: address2In):		  
+     address2In ;
+
+   
+always @( reg6)
+  $display ( bitA, "     ", wordB, "    ", reg6);
    
 
- 
   Parser parser(instruction,
 		opCode,
 		address1In,
@@ -110,7 +116,7 @@ module CPU(clock,
 wire  registerWriteEnable;
 
 `ifdef PBL
-`include "../../NEW/verilog/orszuk.v"
+`include "../../WPDM/verilog/orszuk.v"
 `else	       
    ALU alu (
             .opCode (opCode), 
@@ -160,22 +166,26 @@ always @(posedge clock) begin
          registers[7] <= registerWriteValue;
 end   
 
-   wire [7:0] reg1, reg2, reg3, reg4, reg5; 
+   wire [7:0] reg1, reg2, reg3, reg4, reg5, reg6;
    assign reg1 = registers[1];
    assign reg2 = registers[2];
    assign reg3 = registers[3];
    assign reg4 = registers[4];
    assign reg5 = registers[5];
+   assign reg6 = registers[6];   
+
+   wire	      bitMem;
+   wire [7:0] wordMem;
 
 
 
-//`include "../../NEW/verilog/monitor/debugMyCPU.`
+//`include "../../WPDM/verilog/monitor/debugMyCPU.`
    
-`include "../../NEW/verilog/monitor/debugNEWcpu.sv"   
+//`include "../../WPDM/verilog/monitor/debugNEWcpu.sv"   
 
-//`include "../../NEW/verilog/monitor/watchRegs125.sv"   
+//`include "../../WPDM/verilog/monitor/watchRegs125.sv"   
  
-//`include "../../NEW/verilog/monitor/testRegisters.sv"
+//`include "../../WPDM/verilog/monitor/testRegisters.sv"
    
 endmodule      
 

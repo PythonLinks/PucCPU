@@ -1,6 +1,6 @@
 `timescale 1ns/100ps
 `default_nettype none
-`include "../../NEW/verilog/stack.sv"
+`include "../../WPDM/verilog/stack.sv"
 
 //ResetCode is the instructoin opcode, or the reset code if
 //  reset is pushed.
