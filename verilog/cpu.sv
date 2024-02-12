@@ -69,17 +69,17 @@ module CPU(clock,
 
 assign  realAddressOut =  
       (opCode == LD) ? 
-      (registerHasAddress[0] ?  registers[4]: addressOut) :   	    
+      (registerHasAddress[0] ?  registers[registerOut]: addressOut) :   	    
       addressOut;   	    
 
 assign realAddress1In = 
      (opCode == MUL) ?
-     (registerHasAddress[1] ? registers[4]: address1In):		  
+     (registerHasAddress[1] ? registers[register1In]: address1In):		  
      address1In;
 
 assign realAddress2In = 
      (opCode == MUL) ?
-     (registerHasAddress[0] ? registers[4]: address2In):		  
+     (registerHasAddress[0] ? registers[register2In]: address2In):		  
      address2In ;
 
    
