@@ -23,9 +23,11 @@ CPU cpu (.clock(clock),
 	   
 always #10 clock = ~clock; 
 
+
 initial begin
-   $display ("Position, Velocity Acceleration");
 /*
+    $display ("Position, Velocity Acceleration");
+
    $monitor ("%5.4f", 
              position, 
              "  %5.4f",  
@@ -39,7 +41,7 @@ initial begin
    $dumpvars(0, tb);
    $dumpon;
    
-    #100000 $finish;
+    #10000 $finish;
 end
 
      

@@ -124,42 +124,60 @@ always @( reg6)
      assign isALU = (opCode < 6'h22);
 
    wire signed [7:0]			 positionOut;
-   reg signed [7:0]			 feedback;
-   
+
        
 always @(posedge clock)
-    begin
-    feedback <= registers [8];
     registers[9] <= positionOut;
-   end
    
-Oscillator oscillator(clock, positionOut, feedback);
-  
-     //registers[7] = 0; //position
-initial
-     begin
-     registers[5] = 0;  //error
-     registers[4] = 0;  //error     
-     registers[6] = 8'd39; //Previous Position   
-        
-     #2 $display ("pc OpCo  OSC    pos  prev error intgr work res feedb alu");
+Oscillator oscillator(clock, positionOut, registers[8]);
+//Oscillator oscillator(clock, positionOut, 8'b0);   
 
-      $monitor(
-	   pc, " ",     
-           opCode, "  %d",
-	   reg9, "   ", //Oscillator position    
-           reg7, " ",  //pos	       
-           reg6, " ", 	  //prev     
-           reg5, " ",    //err
-           reg4, "    ",    //intg
-           reg3, " ",     //work
-           reg2, " ",     //result
-           reg8,  " ",    //feedback
-           aluResult ,
-	   " kderi", instructionValue     
-           );
+
+
+reg [7:0] registerWriteValue;   
+//assign registerWriteValue = (opCode == LD)? instructionValue: aluResult;
+assign registerWriteValue =  aluResult;   
+    
+ //Sadly generate does not seem to work in iVerilog
+ always @(posedge clock) begin
+   if (TRUE) 
+          registers [0] <= 0;   
+   if ((registerOut == 1) & registerWriteEnable)     
+          registers[1] <= registerWriteValue;
+   if ((registerOut == 2) & registerWriteEnable)
+          registers[2] <= registerWriteValue;
+   if ((registerOut == 3) & registerWriteEnable)     
+          registers[3] <= registerWriteValue;
+   if ((registerOut == 4) & registerWriteEnable)     
+          registers[4] <= registerWriteValue;
+   if ((registerOut == 5) & registerWriteEnable)
+          registers[5] <= registerWriteValue;
+   if ((registerOut == 6) & registerWriteEnable)     
+          registers[6] <= registerWriteValue;
+   if ((registerOut == 7) & registerWriteEnable)     
+          registers[7] <= registerWriteValue;
+ end   
    
-      end
+initial
+  begin
+    #2 $display ("pc OpCo  OSC    pos  prev error intgr work res feedb alu");
+ 
+       $monitor(
+           pc, " ",     
+            opCode, "  %d",
+           reg9, "   ", //Oscillator position    
+            reg7, " ",  //pos          
+            reg6, " ",    //prev     
+            reg5, " ",    //err
+            reg4, "    ",    //intg
+            reg3, " ",     //work
+            reg2, " ",     //result
+            reg8,  " ",    //feedback
+            aluResult ,
+           " kderi", instructionValue     
+            );
+    
+       end
 
    
    wire signed [7:0] reg1, reg2, reg3, reg4, reg5, reg6, reg7, reg8, reg9;
