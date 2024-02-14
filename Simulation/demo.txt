@@ -12,10 +12,10 @@ def velocity 01
 
 
 //NOW DEFINE THE CONSTANTS
-def setPoint 00 
+def setPoint 90 
 def kProportional 00
 def kIntegral  00
-def kDerivative FF   //THIS IS -1 
+def kDerivative FC   //THIS IS -1 
 def timeStep  01
 
 LD positionIn position                 00

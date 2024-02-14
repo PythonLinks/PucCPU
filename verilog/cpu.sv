@@ -129,8 +129,8 @@ always @(posedge clock)
 Oscillator oscillator(clock, positionOut, registers[8]);
 //Oscillator oscillator(clock, positionOut, 8'b0);   
 
-  `include "../verilog/monitor/pendulum.sv"   
-//  `include "../verilog/monitor/pdi.sv"
+//  `include "../verilog/monitor/pendulum.sv"   
+  `include "../verilog/monitor/pdi.sv"
 
 
    wire signed [7:0]			 registerWriteValue;
@@ -162,7 +162,7 @@ assign registerWriteValue =  aluResult;
    
 initial
   begin
-     registers [6] = -87;//previous position.
+     registers [6] = 30;//previous position.
      registers [4] = 0;//integral.
   end
 
