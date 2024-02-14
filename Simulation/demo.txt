@@ -1,24 +1,47 @@
-//FIRST INITIALIZE BIT MEMORY
-LD  00 03  30    //Load a 0 into register 3 the value pointer
-LD  00 03  30    //Load a 0 into register 3 the value pointer
-LD  00 04  30    //Load a 0 into register 4 the memory pointer
-LD  03 04  04    //LOAD REGISTER 3 into bit memory pointed to by register 4
-NOT 03 03  00     //NEGATE REGISTER 3
-ADD 04 01  04 030 //ADD 1 TO REGISTER 4, INCREMENT
-EQ  04 15  05 030 //TEST IF REG4 == *, result in 5
-IF0JUMP 05 03 03  //
 
-//AND NOW THE WORD MEMORY
-LD  00 03  30    //Load a 0 into register 3 the value pointer
-LD  00 03  30    //Load a 0 into register 3 the value pointer
-LD  00 04  30    //Load a 0 into register 4 the memory pointer
-LD  04 04  05    //LOAD REGISTER 4 into word memory pointed to by register 4
-ADD 04 01  04 030 //ADD 1 TO REGISTER 4, INCREMENT
-EQ  04 15  05 030 //TEST IF REG4 == *, result in 5
-IF0JUMP 05 0B 03  //
+//FIRST DEFINE THE REGISTERS
+def positionIn 09
+def feedbackOut 08
+def position 07
+def previousPosition 06
+def error 05
+def integral 04
+def working 03
+def result 02
+def velocity 01
 
-LD  00 04  30    //Load a 0 into register 4 the memory pointer
-MUL 04 04  06 450    //MULTIPLY THEM.
-ADD 04 01  04 030 //ADD 1 TO REGISTER 4, INCREMENT
-EQ  04 15  05 030 //TEST IF REG4 == *, result in 5
-IF0JUMP 05 10 03  //
+
+//NOW DEFINE THE CONSTANTS
+def setPoint 00 
+def kProportional 00
+def kIntegral  00
+def kDerivative FF   //THIS IS -1 
+def timeStep  01
+
+LD positionIn position                 00
+LD positionIn position                 00
+
+//CALCULATE THE PROPORTIONAL TERM 
+SUB position setPoint error 030          //2
+MUL error kProportional result     030   //3
+
+//CALCULATE THE INTEGRAL TERM
+MUL integral kIntegral working     030  //4
+ADD working result result          000  //5
+
+//CALCULATE THE DERIVATIVE TERM
+SUB position previousPosition velocity 000 //6 08 IS THIS CORRECT
+DIV velocity timeStep velocity      030     //7 0A
+MUL velocity kDerivative  working    030    //8 09
+ADD working result result          000    //9 07
+
+//APPLY THE CONTROL SIGNAL
+MUL result 01  feedbackOut         030  //10 09 
+
+//UPDATE THE INTEGRAL TERM
+MUL error kIntegral  working       030
+ADD working integral integral      000
+
+LD position previousPosition       00
+JUMP 0
+

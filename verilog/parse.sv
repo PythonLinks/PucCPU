@@ -25,11 +25,11 @@ module Parser (instruction,
    output wire [1:0]			       address1Type;
    output wire [1:0]			       address2Type;
    output wire [1:0]			       outType;   
-   
-   output wire        [2:0]		       register1In;
-   output wire        [2:0]		       register2In;
-   output wire        [2:0]		       registerOut;
-   output wire        [2:0]		       registerHasAddress;      
+
+   output wire        [   LOG_OF_REGISTERS-1:0]		       register1In;
+   output wire        [   LOG_OF_REGISTERS-1:0]		       register2In;
+   output wire        [   LOG_OF_REGISTERS-1:0]		       registerOut;
+   output wire        [   LOG_OF_REGISTERS-1:0]		       registerHasAddress;      
 
    output wire [VALUE_WIDTH - 1 :0]   instructionValue;
 
@@ -58,8 +58,8 @@ module Parser (instruction,
    assign outType = instruction[1:0];
 			 
    
-   assign register1In = address1In[2:0];
-   assign register2In = address2In[2:0];
-   assign registerOut = addressOut[2:0];   
+   assign register1In = address1In[3:0];
+   assign register2In = address2In[3:0];
+   assign registerOut = addressOut[3:0];   
 
 endmodule   

@@ -8,6 +8,7 @@
 `include "../../PBL/Modules/memory.sv"
 `include "../verilog/pc.sv"
 `include "../verilog/parse.sv"
+`include "../verilog/oscillator.sv"
 
 `include "../../PBL/Modules/ram_bit.sv"
 `include "../../PBL/Modules/ram_word.sv"
@@ -25,7 +26,7 @@ module CPU(clock,
 
 `include "../../PBL/Modules/parameters.sv"
 
-`ifdef DEMO
+`ifdef DEMO1
 `include "../../WPDM/verilog/monitor/pblDemo.sv"   
 `endif
 
@@ -33,10 +34,10 @@ module CPU(clock,
    input  wire		               clock;
    input  wire		               isReset;
    input  wire			       switch;
-   output wire  [REGISTER_WIDTH-1:0]   register1Value;
-   wire  [REGISTER_WIDTH-1:0]          register2Value;
-   wire        [REGISTER_WIDTH -1:0]   aluResult;
-   reg  [REGISTER_WIDTH-1:0]   registers[NUMBER_OF_REGISTERS-1:0];
+   output wire  signed [REGISTER_WIDTH-1:0]   register1Value;
+   wire  signed [REGISTER_WIDTH-1:0]          register2Value;
+   wire  signed      [REGISTER_WIDTH -1:0]   aluResult;
+   reg  signed [REGISTER_WIDTH-1:0]   registers[NUMBER_OF_REGISTERS-1:0];
 
 
    output wire  [PC_WIDTH-1:0]         pc;
@@ -52,12 +53,12 @@ module CPU(clock,
    wire [1:0]			       address2Type;
    wire [1:0]			       outType;   
    
-   wire        [2:0]		       register1In;
-   wire        [2:0]		       register2In;
-   wire        [2:0]		       registerOut;
-   wire        [2:0]		       registerHasAddress;      
+   wire        [LOG_OF_REGISTERS-1:0]  register1In;
+   wire        [LOG_OF_REGISTERS-1:0]  register2In;
+   wire        [LOG_OF_REGISTERS-1:0]  registerOut;
+   wire        [LOG_OF_REGISTERS-1:0]  registerHasAddress;      
 
-   wire [VALUE_WIDTH - 1 :0]   instructionValue;
+   wire signed [VALUE_WIDTH - 1 :0]   instructionValue;
   
   //Since we can get a reset instruction
   //Or a reset by pushbutton, we have to update the instruction.  
@@ -67,10 +68,9 @@ module CPU(clock,
   wire [REGISTER_WIDTH -1 : 0]	   realAddress2In;
   wire [REGISTER_WIDTH -1 : 0]	   realAddressOut;   
 
-assign  realAddressOut =  
-      (opCode == LD) ? 
-      (registerHasAddress[0] ?  registers[registerOut]: addressOut) :   	    
-      addressOut;   	    
+assign realAddressOut =  
+      (opCode == LD)? 
+      (registerHasAddress[0] ?  registers[registerOut]: addressOut) :   	        addressOut;   	    
 
 assign realAddress1In = 
      (opCode == MUL) ?
@@ -82,10 +82,10 @@ assign realAddress2In =
      (registerHasAddress[0] ? registers[register2In]: address2In):		  
      address2In ;
 
-   
+`ifdef DEMO1   
 always @( reg6)
   $display ( bitA, "     ", wordB, "    ", reg6);
-   
+`endif   
 
   Parser parser(instruction,
 		opCode,
@@ -97,82 +97,81 @@ always @( reg6)
 		outType,
 		register1In,
 		register2In,
-		registerOut,
-		registerHasAddress,
-		instructionValue);
-      
-   assign register1Value = registers[register1In];
-   assign register2Value = registers[register2In];   
+                registerOut,
+                registerHasAddress,
+                instructionValue);
+       
+    assign register1Value = registers[register1In];
+    assign register2Value = registers[register2In];   
+    
+    PC pcModule (.clock(clock),
+                .resetCode (resetCode),
+                .instructionValue(instructionValue),
+                .registerValue(register1Value),
+                .pc (pc));
+    
+    MEMORY memory ( .pc(pc),
+                   .instruction (instruction));
+
+ wire  registerWriteEnable;
+ 
+ `include "../../WPDM/verilog/orszuk.v"
+
+ assign registerWriteEnable = TRUE;
+               
+ reg                                     isALU;
+
+     assign isALU = (opCode < 6'h22);
+
+   wire signed [7:0]			 positionOut;
+   reg signed [7:0]			 feedback;
    
-   PC pcModule (.clock(clock),
-		.resetCode (resetCode),
-		.instructionValue(instructionValue),
-		.registerValue(register1Value),
-		.pc (pc));
+       
+always @(posedge clock)
+    begin
+    feedback <= registers [8];
+    registers[9] <= positionOut;
+   end
    
-   MEMORY memory ( .pc(pc),
-		   .instruction (instruction));
+Oscillator oscillator(clock, positionOut, feedback);
+  
+     //registers[7] = 0; //position
+initial
+     begin
+     registers[5] = 0;  //error
+     registers[4] = 0;  //error     
+     registers[6] = 8'd39; //Previous Position   
+        
+     #2 $display ("pc OpCo  OSC    pos  prev error intgr work res feedb alu");
 
-wire  registerWriteEnable;
-
-`ifdef PBL
-`include "../../WPDM/verilog/orszuk.v"
-`else	       
-   ALU alu (
-            .opCode (opCode), 
-            .register1Value (register1Value),
-            .register2Value (register2Value),
-	    .instructionValue (instructionValue),
-	    .switch (switch),
-            .aluResult(aluResult));
-assign registerWriteEnable = TRUE;
-      
-`endif // !`ifdef PBL
-	       
-reg					 isALU;
-`ifdef PBL
-   assign isALU = (opCode < 6'h22);
-`else
-   assign isALU = ((opCode == ADD) |
-                   (opCode == LSHIFT ) | 
-                   (opCode == RSHIFT) | 
-                   (opCode == INC) | 
-                   (opCode == LOAD) | 
-                   (opCode == LOADSWITCH) | 
-                   (opCode == DECREMENT) )
-                   ;
-`endif
-
-reg [7:0] registerWriteValue;   
-assign registerWriteValue = (opCode == LD)? instructionValue: aluResult;
+      $monitor(
+	   pc, " ",     
+           opCode, "  %d",
+	   reg9, "   ", //Oscillator position    
+           reg7, " ",  //pos	       
+           reg6, " ", 	  //prev     
+           reg5, " ",    //err
+           reg4, "    ",    //intg
+           reg3, " ",     //work
+           reg2, " ",     //result
+           reg8,  " ",    //feedback
+           aluResult ,
+	   " kderi", instructionValue     
+           );
    
-//Sadly generate does not seem to work in iVerilog
-always @(posedge clock) begin
-  if (TRUE) 
-         registers [0] <= 0;   
-  if ((registerOut == 1) & registerWriteEnable)     
-         registers[1] <= registerWriteValue;
-  if ((registerOut == 2) & registerWriteEnable)
-         registers[2] <= registerWriteValue;
-  if ((registerOut == 3) & registerWriteEnable)     
-         registers[3] <= registerWriteValue;
-  if ((registerOut == 4) & registerWriteEnable)     
-         registers[4] <= registerWriteValue;
-  if ((registerOut == 5) & registerWriteEnable)
-         registers[5] <= registerWriteValue;
-  if ((registerOut == 6) & registerWriteEnable)     
-         registers[6] <= registerWriteValue;
-  if ((registerOut == 7) & registerWriteEnable)     
-         registers[7] <= registerWriteValue;
-end   
+      end
 
-   wire [7:0] reg1, reg2, reg3, reg4, reg5, reg6;
+   
+   wire signed [7:0] reg1, reg2, reg3, reg4, reg5, reg6, reg7, reg8, reg9;
    assign reg1 = registers[1];
    assign reg2 = registers[2];
    assign reg3 = registers[3];
    assign reg4 = registers[4];
    assign reg5 = registers[5];
-   assign reg6 = registers[6];   
+   assign reg6 = registers[6];
+   assign reg7 = registers[7];
+   assign reg8 = registers[8];   
+   assign reg9 = registers[9];           
 
    wire	      bitMem;
    wire [7:0] wordMem;

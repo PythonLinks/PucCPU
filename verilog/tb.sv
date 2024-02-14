@@ -20,28 +20,26 @@ CPU cpu (.clock(clock),
 
 );
 
+	   
 always #10 clock = ~clock; 
 
 initial begin
+   $display ("Position, Velocity Acceleration");
+/*
+   $monitor ("%5.4f", 
+             position, 
+             "  %5.4f",  
+            velocity, 
+            "  %5.4f", 
+            acceleration);
+  */ 
     clock = 0;
     isReset = 1'b0;
-    switch = 1'b0;
-
-    #300;
-    switch = ~switch;
-
-    #350;
-    `ifndef PBL
-    //isReset = 1'b1;
-    //#20 isReset = 1'b0;   
-    switch = ~switch;
-    `endif
-   `ifdef PBL
-   #10000 $finish;
-   `else
-   #10000 $finish;
-   `endif   
+   #1 $dumpfile("/Users/lozinski/Documents/Products/School/2ndSemester/Chmiel/WPDM/Simulation/out.vcd");
+   $dumpvars(0, tb);
+   $dumpon;
    
+    #100000 $finish;
 end
 
      
