@@ -117,14 +117,11 @@ always @( reg6)
  
  `include "../../WPDM/verilog/orszuk.v"
 
- assign registerWriteEnable = TRUE;
-               
  reg                                     isALU;
 
      assign isALU = (opCode < 6'h22);
 
-   wire signed [7:0]			 positionOut;
-
+   wire  signed [7:0]			 positionOut;
        
 always @(posedge clock)
     registers[9] <= positionOut;
@@ -132,17 +129,12 @@ always @(posedge clock)
 Oscillator oscillator(clock, positionOut, registers[8]);
 //Oscillator oscillator(clock, positionOut, 8'b0);   
 
-   initial
-     begin
-     #5 $display("\nposition velocity accel feed rfeed sfeed");	
-     $monitor ("%f", oscillator.position,  " ",
-	        oscillator.velocity , " ",
-                oscillator.scaledPosition, " ",
-    	       oscillator.positionOutInt, " ",
-               oscillator.positionOut);
-     end
-   
-reg [7:0] registerWriteValue;   
+  `include "../verilog/monitor/pendulum.sv"   
+//  `include "../verilog/monitor/pdi.sv"
+
+
+   wire signed [7:0]			 registerWriteValue;
+    
 //assign registerWriteValue = (opCode == LD)? instructionValue: aluResult;
 assign registerWriteValue =  aluResult;   
     
@@ -164,6 +156,8 @@ assign registerWriteValue =  aluResult;
           registers[6] <= registerWriteValue;
    if ((registerOut == 7) & registerWriteEnable)     
           registers[7] <= registerWriteValue;
+   if ((registerOut == 8) & registerWriteEnable)     
+          registers[8] <= registerWriteValue;    
  end   
    
 initial
@@ -172,7 +166,7 @@ initial
      registers [4] = 0;//integral.
   end
 
-//  `include "../verilog/monitor/pdi.sv"
+
    
    wire signed [7:0] reg1, reg2, reg3, reg4, reg5, reg6, reg7, reg8, reg9;
    assign reg1 = registers[1];

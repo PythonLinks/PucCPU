@@ -41,7 +41,7 @@ initial begin
    $dumpvars(0, tb);
    $dumpon;
    
-    #10000 $finish;
+    #100000 $finish;
 end
 
      
