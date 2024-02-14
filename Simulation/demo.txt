@@ -39,8 +39,7 @@ ADD working result result          000    //9 07
 MUL result 01  feedbackOut         030  //10 09 
 
 //UPDATE THE INTEGRAL TERM
-MUL error kIntegral  working       030
-ADD working integral integral      000
+ADD error integral integral      000
 
 LD position previousPosition       00
 JUMP 0

@@ -132,8 +132,16 @@ always @(posedge clock)
 Oscillator oscillator(clock, positionOut, registers[8]);
 //Oscillator oscillator(clock, positionOut, 8'b0);   
 
-
-
+   initial
+     begin
+     #5 $display("\nposition velocity accel feed rfeed sfeed");	
+     $monitor ("%f", oscillator.position,  " ",
+	        oscillator.velocity , " ",
+                oscillator.scaledPosition, " ",
+    	       oscillator.positionOutInt, " ",
+               oscillator.positionOut);
+     end
+   
 reg [7:0] registerWriteValue;   
 //assign registerWriteValue = (opCode == LD)? instructionValue: aluResult;
 assign registerWriteValue =  aluResult;   
@@ -160,25 +168,11 @@ assign registerWriteValue =  aluResult;
    
 initial
   begin
-    #2 $display ("pc OpCo  OSC    pos  prev error intgr work res feedb alu");
- 
-       $monitor(
-           pc, " ",     
-            opCode, "  %d",
-           reg9, "   ", //Oscillator position    
-            reg7, " ",  //pos          
-            reg6, " ",    //prev     
-            reg5, " ",    //err
-            reg4, "    ",    //intg
-            reg3, " ",     //work
-            reg2, " ",     //result
-            reg8,  " ",    //feedback
-            aluResult ,
-           " kderi", instructionValue     
-            );
-    
-       end
+     registers [6] = -87;//previous position.
+     registers [4] = 0;//integral.
+  end
 
+//  `include "../verilog/monitor/pdi.sv"
    
    wire signed [7:0] reg1, reg2, reg3, reg4, reg5, reg6, reg7, reg8, reg9;
    assign reg1 = registers[1];

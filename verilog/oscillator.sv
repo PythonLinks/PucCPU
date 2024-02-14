@@ -9,13 +9,8 @@ module Oscillator(clock, positionOut, feedback);
    assign positionOutInt = $rtoi(scaledPosition);
    assign positionOut = positionOutInt - 8'd127;
    
-//  `include "../verilog/monitor/testoscillator.sv"
-/*
-   initial
-     $monitor (feedback, " ", 
-        realFeedback, " ", 
-              scaledRealFeedback);
-  */ 
+//  `include "../verilog/monitor/debugOscillator.sv"
+//  `include "../verilog/monitor/pendulum.sv"   
    
    real	scaledRealFeedback,	  realFeedback;
    real   position, velocity,   acceleration;
@@ -25,7 +20,7 @@ module Oscillator(clock, positionOut, feedback);
        
    parameter  neutral = 0;
    parameter  Kv = 0.01;
-   parameter  Kp = 0.005;
+   parameter  Kp = 0.0005;
       
    initial
      begin
@@ -34,8 +29,8 @@ module Oscillator(clock, positionOut, feedback);
      end
 
  assign acceleration = - (Kv * velocity) 
-   - Kp *(position - neutral) - 
-         (scaledRealFeedback/200.0);
+   - Kp *(position - neutral) + 
+         (scaledRealFeedback/1000.0);
 
  always @(posedge clock)
       begin

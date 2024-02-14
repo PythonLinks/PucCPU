@@ -37,7 +37,7 @@ initial begin
   */ 
     clock = 0;
     isReset = 1'b0;
-   #1 $dumpfile("/Users/lozinski/Documents/Products/School/2ndSemester/Chmiel/WPDM/Simulation/out.vcd");
+   #1 $dumpfile("out.vcd");
    $dumpvars(0, tb);
    $dumpon;
    

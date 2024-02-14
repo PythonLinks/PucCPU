@@ -1,6 +1,6 @@
 iverilog -g2009 -o out.vcd ../verilog/tb.sv ../verilog/cpu.sv
 vvp out.vcd | more
-gtkwave config.gtkw
+#gtkwave config.gtkw
 rm out.vcd
 
 
