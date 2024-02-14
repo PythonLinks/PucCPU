@@ -23,7 +23,7 @@ module Oscillator(clock, positionOut, feedback);
  assign acceleration = 
             - (Kv * velocity) 
             - Kp *(position - neutral) + 
-	      feedback *5000;
+	      feedback *5000; //5 K is good. 
    
 
  always @(posedge clock)

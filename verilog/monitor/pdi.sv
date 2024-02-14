@@ -15,6 +15,7 @@ initial
             reg2, " ",     //result
             reg8,  " ",    //feedback
             aluResult ,
+            " val = ",instructionValue,		
 
             );
 

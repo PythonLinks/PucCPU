@@ -12,17 +12,16 @@ def velocity 01
 
 
 //NOW DEFINE THE CONSTANTS
-def setPoint 90 
-def kProportional 00
-def kIntegral  00
-def kDerivative FC   //THIS IS -1 
 def timeStep  01
-
 LD positionIn position                 00
-LD positionIn position                 00
+def setPoint 50  //HEX THIS is 50 Decimal.x
+def kDerivative FC   //THIS IS -1 
+def kProportional 01
+def kIntegral  00 //0 STEP 0
+LD positionIn position                 00 //1 STEP 1
 
 //CALCULATE THE PROPORTIONAL TERM 
-SUB position setPoint error 030          //2
+SUB position setPoint error 030          //2 08
 MUL error kProportional result     030   //3
 
 //CALCULATE THE INTEGRAL TERM
